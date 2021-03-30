@@ -1,18 +1,25 @@
 import { Modal, Button } from 'react-bootstrap';
 import { withRouter } from 'next/router';
 
-const CreaciónExitosa = ({ show, handleClose, router }) => {
+const ModalSuccess = ({
+  show,
+  handleClose,
+  router,
+  tituloMensaje,
+  mensaje,
+  redireccion,
+}) => {
   return (
     <Modal show={show} onHide={handleClose} backdrop='static' keyboard={false}>
       <Modal.Header>
-        <Modal.Title>Creación Exitosa</Modal.Title>
+        <Modal.Title>{tituloMensaje}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>El paciente se ha creado satisfactoriamente!</Modal.Body>
+      <Modal.Body>{mensaje}</Modal.Body>
       <Modal.Footer>
         <Button
           variant='success'
           onClick={() => {
-            router.push('/admin/pacientes');
+            router.push(redireccion);
           }}>
           Ok! <i className='fas fa-check-circle' />
         </Button>
@@ -21,4 +28,4 @@ const CreaciónExitosa = ({ show, handleClose, router }) => {
   );
 };
 
-export default withRouter(CreaciónExitosa);
+export default withRouter(ModalSuccess);

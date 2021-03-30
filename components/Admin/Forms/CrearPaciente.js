@@ -1,11 +1,12 @@
 import { Form, Col } from 'react-bootstrap';
-import { Boton_A } from '../../CommonStyles/CommonStyles';
+import { Boton_A } from '@/components/CommonStyles/CommonStyles';
 
 const CrearPaciente = ({
   etnias,
   niveles_instruccion,
   tipos_sangre,
   estados_civiles,
+  generos,
   handleSubmit,
   handleaChange,
 }) => {
@@ -106,6 +107,17 @@ const CrearPaciente = ({
 
         <Form.Row>
           <Form.Group as={Col}>
+            <Form.Label>Género:</Form.Label>
+            <Form.Control name='genero_id' as='select' required custom>
+              {generos.map((genero) => (
+                <option key={genero.genero_id} value={genero.genero_id}>
+                  {genero.genero}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group as={Col}>
             <Form.Label>Tipo de Sangre:</Form.Label>
             <Form.Control name='tipo_de_sangre_id' as='select' required custom>
               {tipos_sangre.map((tipo) => (
@@ -130,7 +142,9 @@ const CrearPaciente = ({
               ))}
             </Form.Control>
           </Form.Group>
+        </Form.Row>
 
+        <Form.Row>
           <Form.Group as={Col}>
             <Form.Label>Educación:</Form.Label>
             <Form.Control
@@ -147,9 +161,6 @@ const CrearPaciente = ({
               ))}
             </Form.Control>
           </Form.Group>
-        </Form.Row>
-
-        <Form.Row>
           <Form.Group as={Col}>
             <Form.Label>Etnia:</Form.Label>
             <Form.Control name='etnia_id' as='select' required custom>
@@ -169,8 +180,9 @@ const CrearPaciente = ({
               placeholder='Nombre'
             />
           </Form.Group>
-
-          <Form.Group as={Col}>
+        </Form.Row>
+        <Form.Row>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Contacto de emergencia (teléfono):</Form.Label>
             <Form.Control
               name='contacto_emergencia_telefono'

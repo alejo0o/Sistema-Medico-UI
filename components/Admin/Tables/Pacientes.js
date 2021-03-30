@@ -1,8 +1,8 @@
 import { Table, Button } from 'react-bootstrap';
-import { Boton } from '../../CommonStyles/CommonStyles';
+import { Boton } from '@/components/CommonStyles/CommonStyles';
 import Link from 'next/link';
 
-const Pacientes = ({ pacientes, handleShowInfo }) => {
+const Pacientes = ({ pacientes, handleShowInfo, handleModalDelete }) => {
   return (
     <div className='p-3'>
       <h1>Pacientes</h1>
@@ -35,17 +35,23 @@ const Pacientes = ({ pacientes, handleShowInfo }) => {
                   onClick={() => {
                     handleShowInfo(paciente);
                   }}>
-                  <i className='fas fa-info-circle'></i>
+                  <i className='fas fa-info-circle' />
                 </Button>
               </td>
               <td>
-                <Button variant='primary' onClick={() => {}}>
-                  <i className='fas fa-edit'></i>
-                </Button>
+                <Link href={`/admin/epaciente/${paciente.paciente_id}`}>
+                  <Button variant='primary'>
+                    <i className='fas fa-edit' />
+                  </Button>
+                </Link>
               </td>
               <td>
-                <Button variant='danger' onClick={() => {}}>
-                  <i className='fas fa-trash-alt'></i>
+                <Button
+                  variant='danger'
+                  onClick={() => {
+                    handleModalDelete(paciente);
+                  }}>
+                  <i className='fas fa-trash-alt' />
                 </Button>
               </td>
             </tr>

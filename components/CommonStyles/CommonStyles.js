@@ -2,10 +2,7 @@ import styled from 'styled-components';
 import { Row, Col, Button } from 'react-bootstrap';
 
 export const StyledCol = styled(Col)`
-  border-right: solid 2px #055c9d;
-`;
-export const StyledRow = styled(Row)`
-  border-bottom: solid 2px #055c9d;
+  border: solid 2px #055c9d;
 `;
 export const Boton = styled.a`
   background: #00a5e9;

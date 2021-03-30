@@ -1,9 +1,7 @@
-import { Modal, Button, Col, Row } from 'react-bootstrap';
-import { Boton } from '../../CommonStyles/CommonStyles';
-import { StyledCol, StyledRow } from '../../CommonStyles/CommonStyles';
-import Cell from '../../CommonStyles/TableCell';
-import TextCell from '../../CommonStyles/TextCell';
-import Link from 'next/link';
+import { Modal, Button, Col, Row, ListGroup } from 'react-bootstrap';
+import { StyledCol } from '@/components/CommonStyles/CommonStyles';
+import Cell from '@/components/CommonStyles/TableCell';
+import TextCell from '@/components/CommonStyles/TextCell';
 
 const InfoEvolucion = ({
   show,
@@ -19,49 +17,74 @@ const InfoEvolucion = ({
       </Modal.Header>
 
       <Modal.Body>
-        <Col style={{ border: 'solid 2px #055c9d', borderRadius: '10px' }}>
-          <StyledRow>
-            <StyledCol>
+        <Col>
+          <Row>
+            <StyledCol sm='4'>
               <Cell labelName='Fecha Consulta' info={evolucion.fecha} />
             </StyledCol>
-            <StyledCol>
+            <StyledCol sm='4'>
               <TextCell
                 labelName='Motivo consulta'
                 info={evolucion.motivo_consulta}
               />
             </StyledCol>
-            <Col>
+            <StyledCol sm='4'>
               <TextCell
                 labelName='Procedimiento'
                 info={evolucion.procedimiento}
               />
-            </Col>
-          </StyledRow>
-          <Row>
-            <StyledCol>
-              <TextCell
-                labelName='Diagnostico'
-                info={enfermedades.map(
-                  (enfermedad) => enfermedad.subcategoria_descripcion
-                )}
-              />
             </StyledCol>
-            <StyledCol>
+          </Row>
+          <Row>
+            <StyledCol sm='4'>
+              <label>
+                <strong>Diagnóstico:</strong>
+              </label>
+              <ListGroup>
+                {enfermedades.map((enfermedad) => (
+                  <ListGroup.Item key={enfermedad.subcategoria_id ?? 1}>
+                    {enfermedad.subcategoria_descripcion}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </StyledCol>
+            <StyledCol sm='4'>
               <TextCell labelName='Tratamiento' info={evolucion.tratamiento} />
             </StyledCol>
-            <Col>
-              <Cell
-                labelName='Proximo Control'
-                info={evolucion.proximo_control}
-              />
-            </Col>
+            {paciente.genero_id != 1 ? (
+              <StyledCol sm='4'>
+                <Cell
+                  labelName='Fecha Ultima Menstruación'
+                  info={evolucion.fecha_ultima_menstruación}
+                />
+              </StyledCol>
+            ) : (
+              <StyledCol sm='4'>
+                <Cell
+                  labelName='Proximo Control'
+                  info={evolucion.proximo_control}
+                />
+              </StyledCol>
+            )}
+          </Row>
+          <Row>
+            {paciente.genero_id != 1 ? (
+              <StyledCol sm='4'>
+                <Cell
+                  labelName='Proximo Control'
+                  info={evolucion.proximo_control}
+                />
+              </StyledCol>
+            ) : (
+              <></>
+            )}
           </Row>
         </Col>
       </Modal.Body>
 
       <Modal.Footer>
         <Button variant='secondary' onClick={handleClose}>
-          Close
+          Cerrar
         </Button>
       </Modal.Footer>
     </Modal>

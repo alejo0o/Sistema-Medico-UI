@@ -1,5 +1,5 @@
-import NavBar from '../Admin/NavBar/NavBar';
-import SideNav from '../Admin/SideNav/SideNav';
+import NavBar from '@/components/Admin/NavBar/NavBar';
+import SideNav from '@/components/Admin/SideNav/SideNav';
 
 const AdminLayout = ({ children }) => {
   return (

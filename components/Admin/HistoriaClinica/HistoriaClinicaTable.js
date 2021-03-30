@@ -1,69 +1,77 @@
 import { Row, Col } from 'react-bootstrap';
-import { StyledCol, StyledRow } from '../../CommonStyles/CommonStyles';
-import Cell from '../../CommonStyles/TableCell';
+import { StyledCol } from '@/components/CommonStyles/CommonStyles';
+import Cell from '@/components/CommonStyles/TableCell';
 
-const HistoriaClinicaTable = ({ historia_clinica }) => {
+const HistoriaClinicaTable = ({ historia_clinica, pacienteGenero }) => {
   return (
     <Col
       className='mt-4'
       style={{
-        border: 'solid 2px #055c9d',
-        borderRadius: '10px',
         background: 'white',
       }}>
-      <StyledRow>
-        <StyledCol>
+      <Row>
+        <StyledCol sm='4'>
           <Cell
             labelName='Antecedentes Patológicos'
             info={historia_clinica.antecedentes_patologicos}
           />
         </StyledCol>
-        <StyledCol>
+        <StyledCol sm='4'>
           <Cell
             labelName='Antecedentes Quirúrgicos'
             info={historia_clinica.antecedentes_quirurgicos}
           />
         </StyledCol>
-        <Col>
+        <StyledCol sm='4'>
           <Cell
             labelName='Antecedentes Familiares'
             info={historia_clinica.antecedentes_familiares}
           />
-        </Col>
-      </StyledRow>
-      <StyledRow>
-        <StyledCol>
+        </StyledCol>
+      </Row>
+
+      <Row>
+        <StyledCol sm='4'>
           <Cell
             labelName='Medicamentos Subministrados'
             info={historia_clinica.medicamentos_subministrados}
           />
         </StyledCol>
-        <StyledCol>
-          <Cell labelName='Gestas' info={historia_clinica.gestas} />
-        </StyledCol>
-        <Col>
-          <Cell labelName='Partos' info={historia_clinica.partos} />
-        </Col>
-      </StyledRow>
-      <StyledRow>
-        <StyledCol>
-          <Cell labelName='Cesareas' info={historia_clinica.cesareas} />
-        </StyledCol>
-        <StyledCol>
-          <Cell labelName='Abortos' info={historia_clinica.abortos} />
-        </StyledCol>
-        <Col>
+
+        <StyledCol sm='4'>
           <Cell
             labelName='Método Anticonceptivo'
             info={historia_clinica.metodo_anticonceptivo}
           />
-        </Col>
-      </StyledRow>
-      <Row>
-        <Col>
+        </StyledCol>
+
+        <StyledCol sm='4'>
           <Cell labelName='Hábitos' info={historia_clinica.habitos} />
-        </Col>
+        </StyledCol>
       </Row>
+      {pacienteGenero != 1 && (
+        <Row>
+          <StyledCol sm='4'>
+            <Cell labelName='Gestas' info={historia_clinica.gestas} />
+          </StyledCol>
+
+          <StyledCol sm='4'>
+            <Cell labelName='Partos' info={historia_clinica.partos} />
+          </StyledCol>
+
+          <StyledCol sm='4'>
+            <Cell labelName='Cesareas' info={historia_clinica.cesareas} />
+          </StyledCol>
+        </Row>
+      )}
+
+      {pacienteGenero != 1 && (
+        <Row>
+          <StyledCol sm='4'>
+            <Cell labelName='Abortos' info={historia_clinica.abortos} />
+          </StyledCol>
+        </Row>
+      )}
     </Col>
   );
 };
