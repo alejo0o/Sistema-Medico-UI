@@ -1,8 +1,11 @@
 import { Nav } from 'react-bootstrap';
-import { NavStyle, Styled_link, SideNavImg } from './SideNavStyles';
 import Link from 'next/link';
+import { NavStyle, Styled_link, SideNavImg } from './SideNavStyles';
+import useWindowSize from '@/components/Admin/Hooks/useWindowSize';
 
 const SideNav = () => {
+  const [height, width] = useWindowSize();
+
   return (
     <Nav defaultActiveKey='/home' className='flex-column' style={NavStyle}>
       <Nav.Item className='mb-5'>
@@ -20,6 +23,8 @@ const SideNav = () => {
           Pacientes
         </Styled_link>
       </Link>
+      <div>{height}</div>
+      <div>{width}</div>
     </Nav>
   );
 };

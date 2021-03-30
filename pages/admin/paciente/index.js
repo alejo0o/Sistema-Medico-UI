@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { LinearProgress } from '@material-ui/core';
 //Componentes
 import NuevoPaciente from '@/components/Admin/Forms/CrearPaciente';
 import AdminLayout from '@/components/Layouts/AdminLayout';
 import ModalSuccess from '@/components/Admin/Modales/ModalSuccess';
 import ModalError from '@/components/Admin/Modales/ModalError';
-import nProgress from 'nprogress';
 
 export const getStaticProps = async () => {
   const { data: etnias } = await axios.get(`${process.env.apiURL}/etnias`);
@@ -40,6 +40,7 @@ const index = ({
 }) => {
   //-----Variables de estado de la página-----//
   const [error, seterror] = useState(null); //si existe un error se setea la variable
+  const [loading, setloading] = useState(false);
   const [paciente, setpaciente] = useState({
     //estado previo de la variable
     tipo_de_sangre_id: '1',
@@ -73,25 +74,26 @@ const index = ({
   //Realiza el submit (post) del formulario
   const handleSubmit = async (event) => {
     event.preventDefault();
-    nProgress.start();
+    setloading(true);
     try {
       const response = await axios.post(
         `${process.env.apiURL}/pacientes`,
         paciente
       );
       if (response.status == 201) {
-        nProgress.done();
+        setloading(false);
         setmodalSuccess(true);
       }
     } catch (error_peticion) {
       seterror(error_peticion);
+      setloading(false);
       setmodalError(true);
-      nProgress.done();
     }
   };
 
   return (
     <AdminLayout>
+      {loading && <LinearProgress />}
       <NuevoPaciente
         etnias={etnias}
         niveles_instruccion={niveles_instruccion}

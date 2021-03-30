@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import nProgress from 'nprogress';
+import { LinearProgress } from '@material-ui/core';
 //Componentes
 import { getEdad } from '@/components/utils/utils';
 import AdminLayout from '@/components/Layouts/AdminLayout';
@@ -26,6 +27,7 @@ export const getServerSideProps = async ({ query: { page = 1 } }) => {
 const index = ({ data }) => {
   /*-------------Variables de estado de la pagina-------------*/
   const [error, seterror] = useState(null); //si existe un error se setea la var
+  const [loading, setloading] = useState(false);
   const [paciente, setpaciente] = useState({
     //estado previo de la variable
     apellidos: '',
@@ -58,7 +60,7 @@ const index = ({ data }) => {
   //Controla cuando aparece el modal de información y
   //consulta si existe una historia clinica con el paciente asociado
   const handleShowInfo = async (paciente_info) => {
-    nProgress.start();
+    setloading(true);
     setpaciente(paciente_info);
     try {
       const { data } = await axios.get(
@@ -67,9 +69,9 @@ const index = ({ data }) => {
       data ? sethistoria_clinica(true) : sethistoria_clinica(false);
     } catch (error_peticion) {
       seterror(error_peticion);
-      nProgress.done();
+      setloading(false);
     }
-    nProgress.done();
+    setloading(false);
     setshowInfo(true);
   };
   //Controla cuando aparece el modal de eliminación
@@ -97,6 +99,7 @@ const index = ({ data }) => {
 
   return (
     <AdminLayout>
+      {loading && <LinearProgress />}
       <PacientesTable
         pacientes={pacientes}
         handleShowInfo={handleShowInfo}

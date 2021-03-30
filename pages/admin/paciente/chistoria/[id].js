@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import nProgress from 'nprogress';
-
+import { LinearProgress } from '@material-ui/core';
 //Componentes
 import AdminLayout from '@/components/Layouts/AdminLayout';
 import NuevaHistoria from '@/components/Admin/Forms/CrearHistoriaClinica';
@@ -24,6 +23,7 @@ export const getServerSideProps = async ({ params }) => {
 const index = ({ paciente }) => {
   //----------Variables de estado de la pagina---------//
   const [error, seterror] = useState(null); //si existe un error se setea la variable
+  const [loading, setloading] = useState(false);
   const [historia_clinica, sethistoria_clinica] = useState({
     //estado previo de la variable
     paciente_id: paciente.paciente_id,
@@ -56,25 +56,26 @@ const index = ({ paciente }) => {
   //Realiza el submit (post) del formulario
   const handleSubmit = async (event) => {
     event.preventDefault();
-    nProgress.start();
+    setloading(true);
     try {
       const response = await axios.post(
         `${process.env.apiURL}/historiasclinicas`,
         historia_clinica
       );
       if (response.status == 201) {
-        nProgress.done();
+        setloading(false);
         setmodalSuccess(true);
       }
     } catch (error_peticion) {
       seterror(error_peticion);
       setmodalError(true);
-      nProgress.done();
+      setloading(false);
     }
   };
 
   return (
     <AdminLayout>
+      {loading && <LinearProgress />}
       <NuevaHistoria
         handleSubmit={handleSubmit}
         handleaChange={handleChange}
