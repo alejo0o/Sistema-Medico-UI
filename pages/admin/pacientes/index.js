@@ -10,6 +10,7 @@ import PacientesTable from '@/components/Admin/Tables/Pacientes';
 import Pagination from '@/components/Admin/Pagination/Paginated';
 import ModalInfoPaciente from '@/components/Admin/Modales/InfoPaciente';
 import ModalEliminar from '@/components/Admin/Modales/ModalEliminar';
+import PacientesTableMUI from '@/components/Admin/Tables/PacientesMUI.js';
 
 export const getServerSideProps = async ({ query: { page = 1 } }) => {
   const { data } = await axios.get(
@@ -100,7 +101,7 @@ const index = ({ data }) => {
   return (
     <AdminLayout>
       {loading && <LinearProgress />}
-      <PacientesTable
+      <PacientesTableMUI
         pacientes={pacientes}
         handleShowInfo={handleShowInfo}
         handleModalDelete={handleModalDelete}

@@ -15,7 +15,9 @@ const Evoluciones = ({
       <h4>Evoluciones</h4>
 
       <Link href={`/admin/paciente/cevolucion/${paciente.paciente_id}`}>
-        <Boton className='btn mb-2'>Nueva Evolución</Boton>
+        <Boton size='lg' color='blue' className='btn mb-2'>
+          Nueva Evolución
+        </Boton>
       </Link>
 
       {/*-----------------Tabla-------------*/}

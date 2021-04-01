@@ -103,7 +103,7 @@ const CrearEvolucion = ({
           type='submit'
           size='lg'
           style={{ margin: '0 auto' }}>
-          Crear Historial
+          Crear Evolución
         </Boton_A>
       </Form>
     </div>

@@ -1,8 +1,8 @@
 import { Modal, Button, Col, Row } from 'react-bootstrap';
 import Link from 'next/link';
 //Componentes
-import { Boton } from '@/components/CommonStyles/CommonStyles';
-import { StyledCol } from '@/components/CommonStyles/CommonStyles';
+
+import { Boton, StyledCol } from '@/components/CommonStyles/CommonStyles';
 import Cell from '@/components/CommonStyles/TableCell';
 
 const InfoPaciente = ({
@@ -101,16 +101,20 @@ const InfoPaciente = ({
       <Modal.Footer>
         {historia_clinica ? (
           <Link href={`/admin/paciente/historia/${paciente.paciente_id}`}>
-            <Boton className='btn'>Historial Clínico</Boton>
+            <a style={{ textDecoration: 'none' }}>
+              <Boton color='blue'>Historial Clínico</Boton>
+            </a>
           </Link>
         ) : (
           <Link href={`/admin/paciente/chistoria/${paciente.paciente_id}`}>
-            <Boton className='btn'>Crear Historia Clínica</Boton>
+            <a style={{ textDecoration: 'none' }}>
+              <Boton color='blue'>Crear Historia Clínica</Boton>
+            </a>
           </Link>
         )}
-        <Button variant='secondary' onClick={handleClose}>
+        <Boton color='gray' onClick={handleClose}>
           Cerrar
-        </Button>
+        </Boton>
       </Modal.Footer>
     </Modal>
   );

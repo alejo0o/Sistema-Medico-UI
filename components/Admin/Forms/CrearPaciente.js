@@ -15,7 +15,7 @@ const CrearPaciente = ({
       <h4 className='mb-3'>Nuevo Paciente</h4>
       <Form onSubmit={handleSubmit} onChange={handleaChange}>
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Cedula:</Form.Label>
             <Form.Control
               name='cedula'
@@ -25,7 +25,7 @@ const CrearPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Nombres:</Form.Label>
             <Form.Control
               name='nombres'
@@ -35,7 +35,7 @@ const CrearPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Apellidos:</Form.Label>
             <Form.Control
               name='apellidos'
@@ -47,12 +47,12 @@ const CrearPaciente = ({
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Fecha de Nacimiento:</Form.Label>
             <Form.Control name='fechanacimiento' type='date' required />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Lugar de Nacimiento:</Form.Label>
             <Form.Control
               name='lugarnacimiento'
@@ -62,7 +62,7 @@ const CrearPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Dirección:</Form.Label>
             <Form.Control
               name='direccion'
@@ -74,7 +74,7 @@ const CrearPaciente = ({
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Teléfono:</Form.Label>
             <Form.Control
               name='telefono'
@@ -84,7 +84,7 @@ const CrearPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Ocupación:</Form.Label>
             <Form.Control
               name='ocupacion'
@@ -94,7 +94,7 @@ const CrearPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Numero de hijos:</Form.Label>
             <Form.Control
               name='numero_hijos'
@@ -106,7 +106,7 @@ const CrearPaciente = ({
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Género:</Form.Label>
             <Form.Control name='genero_id' as='select' required custom>
               {generos.map((genero) => (
@@ -117,7 +117,7 @@ const CrearPaciente = ({
             </Form.Control>
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Tipo de Sangre:</Form.Label>
             <Form.Control name='tipo_de_sangre_id' as='select' required custom>
               {tipos_sangre.map((tipo) => (
@@ -130,7 +130,7 @@ const CrearPaciente = ({
             </Form.Control>
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Estado Civil:</Form.Label>
             <Form.Control name='estado_civil_id' as='select' required custom>
               {estados_civiles.map((estado) => (
@@ -145,7 +145,7 @@ const CrearPaciente = ({
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Educación:</Form.Label>
             <Form.Control
               name='nivel_de_instruccion_id'
@@ -161,7 +161,7 @@ const CrearPaciente = ({
               ))}
             </Form.Control>
           </Form.Group>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Etnia:</Form.Label>
             <Form.Control name='etnia_id' as='select' required custom>
               {etnias.map((etnia) => (
@@ -172,7 +172,7 @@ const CrearPaciente = ({
             </Form.Control>
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Contacto de emergencia (nombre):</Form.Label>
             <Form.Control
               name='contacto_emergencia_nombre'
@@ -182,7 +182,7 @@ const CrearPaciente = ({
           </Form.Group>
         </Form.Row>
         <Form.Row>
-          <Form.Group as={Col} sm='4'>
+          <Form.Group as={Col} sm='4' sm='4'>
             <Form.Label>Contacto de emergencia (teléfono):</Form.Label>
             <Form.Control
               name='contacto_emergencia_telefono'

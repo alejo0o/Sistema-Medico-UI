@@ -1,16 +1,18 @@
+import { useState } from 'react';
+import Drawer from '@/components/Admin/Drawer/SideDrawer';
 import NavBar from '@/components/Admin/NavBar/NavBar';
-import SideNav from '@/components/Admin/SideNav/SideNav';
-import Hidden from '@material-ui/core/Hidden';
 
 const AdminLayout = ({ children }) => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
   return (
     <div className='d-flex'>
-      <Hidden only={['xs', 'sm']}>
-        <SideNav />
-      </Hidden>
-
-      <div className='d-block w-100'>
-        <NavBar />
+      <Drawer mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+      <div className='w-100'>
+        <NavBar handleDrawerToggle={handleDrawerToggle} />
         {children}
       </div>
     </div>

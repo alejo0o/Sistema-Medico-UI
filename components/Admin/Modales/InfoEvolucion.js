@@ -1,4 +1,5 @@
-import { Modal, Button, Col, Row, ListGroup } from 'react-bootstrap';
+import { Modal, Col, Row, ListGroup } from 'react-bootstrap';
+import { Boton } from '@/components/CommonStyles/CommonStyles';
 import { StyledCol } from '@/components/CommonStyles/CommonStyles';
 import Cell from '@/components/CommonStyles/TableCell';
 import TextCell from '@/components/CommonStyles/TextCell';
@@ -83,9 +84,9 @@ const InfoEvolucion = ({
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant='secondary' onClick={handleClose}>
+        <Boton color='gray' onClick={handleClose}>
           Cerrar
-        </Button>
+        </Boton>
       </Modal.Footer>
     </Modal>
   );

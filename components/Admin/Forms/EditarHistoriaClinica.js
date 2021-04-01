@@ -158,7 +158,7 @@ const EditarHistoriaClinica = ({
           type='submit'
           size='lg'
           style={{ margin: '0 auto' }}>
-          Crear Historial
+          Editar Historial
         </Boton_A>
       </Form>
     </div>

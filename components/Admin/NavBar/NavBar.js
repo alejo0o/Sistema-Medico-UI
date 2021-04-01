@@ -1,16 +1,27 @@
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
-import Hidden from '@material-ui/core/Hidden';
-import { NavButton } from './NavBarStyles';
+//Material
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-const NavBar = ({ router }) => {
+const NavBar = ({ router, handleDrawerToggle }) => {
+  const matches = useMediaQuery('(max-width:991px)');
   return (
-    <Navbar expand='lg' style={{ background: '#00A5E9' }}>
+    <Navbar expand='lg' style={{ background: '#00A5E9' }} sticky='top'>
       <Nav.Item>
-        <Hidden only={['md', 'lg', 'xl']}>
-          <i className='fas fa-bars' style={{ fontSize: '1.2em' }} />
-        </Hidden>
+        {matches ? (
+          <IconButton
+            color='inherit'
+            aria-label='open drawer'
+            edge='start'
+            onClick={handleDrawerToggle}>
+            <MenuIcon />
+          </IconButton>
+        ) : (
+          <></>
+        )}
         <Link href='/'>
           <a className='navbar-brand ml-2'>
             <strong> Company Name</strong>
@@ -20,13 +31,14 @@ const NavBar = ({ router }) => {
       <Navbar.Toggle aria-controls='basic-navbar-nav' />
       <Navbar.Collapse id='basic-navbar-nav'>
         <Nav className='ml-auto'>
-          <NavButton
+          <Button
+            className={matches ? 'mb-2' : 'mr-2'}
             variant='light'
             onClick={() => {
               router.back();
             }}>
             <i className='fas fa-arrow-circle-left' /> Regresar
-          </NavButton>
+          </Button>
 
           <Link href='/'>
             <a className='btn btn-light'>

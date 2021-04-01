@@ -8,12 +8,21 @@ const Pacientes = ({ pacientes, handleShowInfo, handleModalDelete }) => {
       <h1>Pacientes</h1>
 
       <Link href='/admin/paciente'>
-        <Boton className='btn mb-3 mt-2'>Nuevo Paciente</Boton>
+        <a style={{ textDecoration: 'none' }}>
+          <Boton color='blue' size='lg' className='btn mb-3 mt-1'>
+            Nuevo Paciente <i className='fas fa-user' />
+          </Boton>
+        </a>
       </Link>
 
       {/*-----------------Tabla-------------*/}
-      <Table striped bordered hover variant='dark' responsive>
-        <thead>
+      <Table
+        striped
+        hover
+        bordered
+        responsive
+        style={{ fontSize: 14, minWidth: 700 }}>
+        <thead style={{ background: '#055C9D', color: 'white' }}>
           <tr style={{ textAlign: 'center' }}>
             <th>DNI</th>
             <th>Nombres</th>

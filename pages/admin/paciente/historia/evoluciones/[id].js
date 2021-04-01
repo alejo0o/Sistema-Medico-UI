@@ -8,6 +8,7 @@ import Pagination from '@/components/Admin/Pagination/Paginated';
 import EvolucionesTable from '@/components/Admin/Tables/Evoluciones';
 import ModalInfoEvolucion from '@/components/Admin/Modales/InfoEvolucion';
 import ModalEliminar from '@/components/Admin/Modales/ModalEliminar';
+import EvolucionesTableMUI from '@/components/Admin/Tables/EvolucionesMUI';
 
 export const getServerSideProps = async ({ query: { page = 1, id } }) => {
   //Retorna las evoluciones del paciente con el id indicado
@@ -99,7 +100,7 @@ const index = ({ data, paciente }) => {
   return (
     <AdminLayout>
       {loading && <LinearProgress />}
-      <EvolucionesTable
+      <EvolucionesTableMUI
         evoluciones={evoluciones}
         handleShowInfo={handleShowInfo}
         paciente={paciente}

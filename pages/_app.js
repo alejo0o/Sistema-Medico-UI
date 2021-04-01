@@ -1,4 +1,11 @@
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import React from 'react';
+import App from 'next/app';
+import Head from 'next/head';
+import { ThemeProvider } from '@material-ui/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import theme from '@/components/CommonStyles/theme';
+//Non material ui imports
+import { createGlobalStyle } from 'styled-components';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NProgress from 'nprogress';
@@ -26,19 +33,36 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const theme = {
-  colors: {
-    primary: '#0070f3',
-  },
-};
+class MyApp extends App {
+  componentDidMount() {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+  }
 
-export default function App({ Component, pageProps }) {
-  return (
-    <>
-      <GlobalStyle />
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </>
-  );
+  render() {
+    const { Component, pageProps } = this.props;
+
+    return (
+      <>
+        <Head>
+          <title>My page</title>
+          <meta
+            name='viewport'
+            content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
+          />
+        </Head>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <GlobalStyle />
+          {/*<CssBaseline />*/}
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </>
+    );
+  }
 }
+
+export default MyApp;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const AlergiasContainer = styled.div`
-  background: #f83839;
+  background: linear-gradient(to right, #eb3349 0%, #f45c43 51%, #eb3349 100%);
   color: #fff;
   border-radius: 10px;
 `;

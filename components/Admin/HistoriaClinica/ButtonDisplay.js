@@ -8,27 +8,31 @@ const ButtonDisplay = ({ pacienteId, handleModalDelete }) => {
     <ButtonsContainer>
       <ButtonContainer>
         <Link href={`/admin/paciente/historia/evoluciones/${pacienteId}`}>
-          <Boton className='btn mb-3 mt-1'>
-            Evoluciones <i className='fas fa-copy' />
-          </Boton>
+          <a style={{ textDecoration: 'none' }}>
+            <Boton color='blue' className='btn mb-3 mt-1'>
+              Evoluciones <i className='fas fa-copy' />
+            </Boton>
+          </a>
         </Link>
       </ButtonContainer>
       <ButtonContainer>
         <Link href={`/admin/paciente/ehistoria/${pacienteId}`}>
-          <Button variant='info' className='btn mb-3 mt-1'>
-            Editar Historia Clínica <i className='fas fa-edit' />
-          </Button>
+          <a style={{ textDecoration: 'none' }}>
+            <Boton color='green' className='btn mb-3 mt-1'>
+              Editar Historia Clínica <i className='fas fa-edit' />
+            </Boton>
+          </a>
         </Link>
       </ButtonContainer>
       <ButtonContainer>
-        <Button
-          variant='danger'
+        <Boton
+          color='red'
           className='btn mb-3 mt-1'
           onClick={() => {
             handleModalDelete();
           }}>
           Eliminar Historia Clínica <i className='fas fa-trash-alt' />
-        </Button>
+        </Boton>
       </ButtonContainer>
     </ButtonsContainer>
   );
