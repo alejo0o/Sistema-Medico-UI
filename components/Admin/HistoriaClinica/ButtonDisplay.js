@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { ButtonContainer, ButtonsContainer } from './HistoriaClinicaStyle';
-import { Button } from 'react-bootstrap';
 import { Boton } from '@/components/CommonStyles/CommonStyles';
 
 const ButtonDisplay = ({ pacienteId, handleModalDelete }) => {

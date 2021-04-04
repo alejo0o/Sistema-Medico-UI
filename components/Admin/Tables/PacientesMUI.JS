@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 //
 import { Boton } from '@/components/CommonStyles/CommonStyles';
 import Link from 'next/link';
-import { Button } from 'react-bootstrap';
+import { Button, Form, Col } from 'react-bootstrap';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -39,6 +39,9 @@ export default function CustomizedTables({
   pacientes,
   handleModalDelete,
   handleShowInfo,
+  handleChangeQuery,
+  pacientesQuery,
+  handleSearchPacientes,
 }) {
   const classes = useStyles();
 
@@ -53,6 +56,23 @@ export default function CustomizedTables({
           </Boton>
         </a>
       </Link>
+      <br />
+
+      <Form.Group as={Col} sm='4' className='pl-0'>
+        <Form.Label>Cédula o nombre:</Form.Label>
+        <div className='d-flex'>
+          <Form.Control
+            placeholder='Cédula o Nombre'
+            name='categoria'
+            type='text'
+            value={pacientesQuery}
+            onChange={handleChangeQuery}
+          />
+          <Boton className='' onClick={handleSearchPacientes}>
+            <i className='fas fa-search' style={{ fontSize: '1.5em' }} />
+          </Boton>
+        </div>
+      </Form.Group>
 
       {/*-----------------Tabla-------------*/}
       <TableContainer component={Paper}>

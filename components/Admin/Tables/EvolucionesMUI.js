@@ -49,7 +49,8 @@ export default function CustomizedTables({
       <h3>{`CI: ${paciente.cedula}`}</h3>
       <h4>Evoluciones</h4>
 
-      <Link href={`/admin/paciente/cevolucion/${paciente.paciente_id}`}>
+      <Link
+        href={`/admin/paciente/historia/crearevolucion/${paciente.paciente_id}`}>
         <Boton size='lg' color='blue' className='btn mb-2'>
           Nueva Evolución
         </Boton>
@@ -90,7 +91,8 @@ export default function CustomizedTables({
                   </Button>
                 </StyledTableCell>
                 <StyledTableCell component='td' align='center'>
-                  <Link href={`/admin/pacientes`}>
+                  <Link
+                    href={`/admin/paciente/historia/editarevolucion/${paciente.paciente_id}/${evolucion.evolucion_id}`}>
                     <Button variant='primary'>
                       <i className='fas fa-edit' />
                     </Button>
@@ -100,7 +102,7 @@ export default function CustomizedTables({
                   <Button
                     variant='danger'
                     onClick={() => {
-                      handleModalDelete(paciente);
+                      handleModalDelete(evolucion);
                     }}>
                     <i className='fas fa-trash-alt' />
                   </Button>

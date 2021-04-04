@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Col, Button } from 'react-bootstrap';
 
 export const StyledCol = styled(Col)`
   border: solid 2px #055c9d;

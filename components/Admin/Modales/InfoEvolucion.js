@@ -4,13 +4,15 @@ import { StyledCol } from '@/components/CommonStyles/CommonStyles';
 import Cell from '@/components/CommonStyles/TableCell';
 import TextCell from '@/components/CommonStyles/TextCell';
 
-const InfoEvolucion = ({
-  show,
-  handleClose,
-  paciente,
-  evolucion,
-  enfermedades,
-}) => {
+const InfoEvolucion = ({ show, handleClose, paciente, evolucion }) => {
+  const enfermedades = evolucion.diagnostico
+    ? JSON.parse(evolucion.diagnostico)
+    : [];
+  /*{Object.keys(enfermedades).map((key) => (
+                  <ListGroup.Item variant='info' key={key}>
+                    {`${key}: ${enfermedades[key]}`}
+                  </ListGroup.Item>
+                ))} */
   return (
     <Modal show={show} onHide={handleClose} size='xl'>
       <Modal.Header closeButton>
@@ -36,15 +38,16 @@ const InfoEvolucion = ({
               />
             </StyledCol>
           </Row>
+
           <Row>
             <StyledCol sm='4'>
               <label>
                 <strong>Diagnóstico:</strong>
               </label>
-              <ListGroup>
+              <ListGroup className='mb-2'>
                 {enfermedades.map((enfermedad) => (
-                  <ListGroup.Item key={enfermedad.subcategoria_id ?? 1}>
-                    {enfermedad.subcategoria_descripcion}
+                  <ListGroup.Item variant='info' key={enfermedad.codigo}>
+                    {`${enfermedad.codigo}: ${enfermedad.descripcion}`}
                   </ListGroup.Item>
                 ))}
               </ListGroup>
@@ -56,7 +59,7 @@ const InfoEvolucion = ({
               <StyledCol sm='4'>
                 <Cell
                   labelName='Fecha Ultima Menstruación'
-                  info={evolucion.fecha_ultima_menstruación}
+                  info={evolucion.fecha_ultima_menstruacion}
                 />
               </StyledCol>
             ) : (
@@ -93,3 +96,8 @@ const InfoEvolucion = ({
 };
 
 export default InfoEvolucion;
+/* 
+<ListGroup.Item key={enfermedad.subcategoria_id ?? 1}>
+                    {enfermedad.subcategoria_descripcion}
+                  </ListGroup.Item>
+                   */

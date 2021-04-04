@@ -12,6 +12,10 @@ export const getServerSideProps = async ({ params }) => {
   const { data: paciente } = await axios.get(
     `${process.env.apiURL}/pacientes/${params?.id}`
   );
+  if (!paciente)
+    return {
+      notFound: true,
+    };
   //--------Extrae los valores de etnias,educación,sangre y estado civil----//
   const { data: etnias } = await axios.get(`${process.env.apiURL}/etnias`);
   const { data: niveles_instruccion } = await axios.get(
@@ -24,9 +28,10 @@ export const getServerSideProps = async ({ params }) => {
     `${process.env.apiURL}/estadosciviles`
   );
   const { data: generos } = await axios.get(`${process.env.apiURL}/generos`);
+
   //Retira los espacios innecesarios que traen los datos
   Object.keys(paciente).forEach(function (key) {
-    paciente[key] = String(paciente[key]).trim();
+    paciente[key] = paciente[key] == null ? '' : String(paciente[key]).trim();
   });
 
   return {
@@ -117,7 +122,7 @@ const index = ({
         handleChange={handleChange}
         paciente={pacienteEdit}
       />
-      {/*----------Modal de peitición exitosa------- */}
+      {/*----------Modal de petición exitosa------- */}
       <ModalSuccess
         show={modalSuccess}
         handleClose={() => setmodalSuccess(false)}

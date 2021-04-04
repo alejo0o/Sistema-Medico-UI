@@ -1,12 +1,11 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import nProgress from 'nprogress';
 import { LinearProgress } from '@material-ui/core';
 //Componentes
 import { getEdad } from '@/components/utils/utils';
 import AdminLayout from '@/components/Layouts/AdminLayout';
-import PacientesTable from '@/components/Admin/Tables/Pacientes';
 import Pagination from '@/components/Admin/Pagination/Paginated';
 import ModalInfoPaciente from '@/components/Admin/Modales/InfoPaciente';
 import ModalEliminar from '@/components/Admin/Modales/ModalEliminar';
@@ -52,12 +51,18 @@ const index = ({ data }) => {
   const [historia_clinica, sethistoria_clinica] = useState(false); //define si existe una historia asociada a un paciente
   const [showInfo, setshowInfo] = useState(false); //variable para el modal de info Paciente
   const [deleteModal, setdeleteModal] = useState(false); //variable para el modal de eliminación
+  const [pacientesQuery, setpacientesQuery] = useState('');
+  const [pacientesQueryResultados, setpacientesQueryResultados] = useState();
   //-------------Props de la pagina--------------------//
   const router = useRouter();
   const { data: pacientes } = data;
   const { last_page } = data;
 
   //-------------Funciones de la página------------//
+  useMemo(() => {
+    if (pacientesQuery.trim().length == 0)
+      setpacientesQueryResultados(pacientes);
+  }, [pacientesQuery]);
   //Controla cuando aparece el modal de información y
   //consulta si existe una historia clinica con el paciente asociado
   const handleShowInfo = async (paciente_info) => {
@@ -98,13 +103,41 @@ const index = ({ data }) => {
     }
   };
 
+  //Maneja los cambios en el query de busqueda
+  const handleChangeQuery = (event) => {
+    setpacientesQuery(String(event.target.value));
+  };
+  //Realiza la petición de buscar los pacientes
+  const handleSearchPacientes = async () => {
+    if (pacientesQuery.trim()) {
+      setloading(true);
+      try {
+        const {
+          data: { data: pacientesResultados },
+        } = await axios.get(
+          `${process.env.apiURL}/getpacientesbusqueda/${pacientesQuery.trim()}`
+        );
+        setpacientesQueryResultados(pacientesResultados);
+        setloading(false);
+      } catch (error_peticion) {
+        seterror(error_peticion);
+        setloading(false);
+      }
+    } else {
+      setpacientesQueryResultados();
+    }
+  };
+
   return (
     <AdminLayout>
       {loading && <LinearProgress />}
       <PacientesTableMUI
-        pacientes={pacientes}
+        pacientes={pacientesQueryResultados ?? pacientes}
         handleShowInfo={handleShowInfo}
         handleModalDelete={handleModalDelete}
+        handleChangeQuery={handleChangeQuery}
+        pacientesQuery={pacientesQuery}
+        handleSearchPacientes={handleSearchPacientes}
       />
       <Pagination totalPages={last_page} path='/admin/pacientes' />
       {/*----------Modal para ver la información del paciente------- */}
@@ -120,7 +153,7 @@ const index = ({ data }) => {
         show={deleteModal}
         handleClose={() => setdeleteModal(false)}
         titulo='Eliminar Paciente'
-        mensaje={`Esta seguro que desea eliminar el paciente ${paciente.nombres} ${paciente.apellidos} con CI: ${paciente.cedula}?`}
+        mensaje={`Esta seguro que desea eliminar el paciente ${paciente.nombres} ${paciente.apellidos} con CI: ${paciente.cedula}? (SU HISTORIAL CLÍNICO TAMBIEN SE ELIMINARÁ).`}
         handleDelete={handleDelete}
       />
     </AdminLayout>

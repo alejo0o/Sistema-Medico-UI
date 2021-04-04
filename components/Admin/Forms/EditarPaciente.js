@@ -16,7 +16,7 @@ const EditarPaciente = ({
       <h4 className='mb-3'>Editar Paciente</h4>
       <Form onSubmit={handleSubmit}>
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Cedula:</Form.Label>
             <Form.Control
               name='cedula'
@@ -27,7 +27,7 @@ const EditarPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Nombres:</Form.Label>
             <Form.Control
               name='nombres'
@@ -38,7 +38,7 @@ const EditarPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Apellidos:</Form.Label>
             <Form.Control
               name='apellidos'
@@ -51,7 +51,7 @@ const EditarPaciente = ({
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Fecha de Nacimiento:</Form.Label>
             <Form.Control
               name='fechanacimiento'
@@ -62,7 +62,7 @@ const EditarPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Lugar de Nacimiento:</Form.Label>
             <Form.Control
               name='lugarnacimiento'
@@ -73,7 +73,7 @@ const EditarPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Dirección:</Form.Label>
             <Form.Control
               name='direccion'
@@ -86,7 +86,7 @@ const EditarPaciente = ({
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Teléfono:</Form.Label>
             <Form.Control
               name='telefono'
@@ -97,7 +97,7 @@ const EditarPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Ocupación:</Form.Label>
             <Form.Control
               name='ocupacion'
@@ -108,7 +108,7 @@ const EditarPaciente = ({
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Numero de hijos:</Form.Label>
             <Form.Control
               name='numero_hijos'
@@ -121,7 +121,7 @@ const EditarPaciente = ({
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Género:</Form.Label>
             <Form.Control
               name='genero_id'
@@ -137,7 +137,7 @@ const EditarPaciente = ({
               ))}
             </Form.Control>
           </Form.Group>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Tipo de Sangre:</Form.Label>
             <Form.Control
               name='tipo_de_sangre_id'
@@ -156,7 +156,7 @@ const EditarPaciente = ({
             </Form.Control>
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Estado Civil:</Form.Label>
             <Form.Control
               name='estado_civil_id'
@@ -177,7 +177,7 @@ const EditarPaciente = ({
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Educación:</Form.Label>
             <Form.Control
               name='nivel_de_instruccion_id'
@@ -195,7 +195,7 @@ const EditarPaciente = ({
               ))}
             </Form.Control>
           </Form.Group>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Etnia:</Form.Label>
             <Form.Control
               name='etnia_id'
@@ -212,12 +212,12 @@ const EditarPaciente = ({
             </Form.Control>
           </Form.Group>
 
-          <Form.Group as={Col}>
+          <Form.Group as={Col} sm='4'>
             <Form.Label>Contacto de emergencia (nombre):</Form.Label>
             <Form.Control
               name='contacto_emergencia_nombre'
               type='text'
-              value={paciente.contacto_emergencia_nombre}
+              value={paciente.contacto_emergencia_nombre ?? ''}
               onChange={handleChange}
             />
           </Form.Group>

@@ -24,7 +24,8 @@ export const getServerSideProps = async ({ params }) => {
 
   //Retira los espacios innecesarios que traen los datos
   Object.keys(historiaClinica).forEach(function (key) {
-    historiaClinica[key] = String(historiaClinica[key]).trim();
+    historiaClinica[key] =
+      historiaClinica[key] == null ? '' : String(historiaClinica[key]).trim();
   });
 
   return {
@@ -97,7 +98,7 @@ const index = ({ paciente, historiaClinica }) => {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
-      {/*----------Modal de peitición exitosa------- */}
+      {/*----------Modal de petición exitosa------- */}
       <ModalSuccess
         show={modalSuccess}
         handleClose={() => setmodalSuccess(false)}

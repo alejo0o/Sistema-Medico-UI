@@ -1,15 +1,16 @@
 import Link from 'next/link';
 //import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import { useTheme } from '@material-ui/core/styles';
+import {
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
+} from '@material-ui/core';
 import { useStyles } from './DrawerStyles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 function ResponsiveDrawer(props) {
   const { window } = props;

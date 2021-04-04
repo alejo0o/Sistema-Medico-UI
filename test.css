@@ -9,9 +9,9 @@
 .btn-grad {
   background-image: linear-gradient(
     to right,
-    #ece9e6 0%,
-    #ffffff 51%,
-    #ece9e6 100%
+    #1fa2ff 0%,
+    #12d8fa 51%,
+    #1fa2ff 100%
   );
 }
 .btn-grad {

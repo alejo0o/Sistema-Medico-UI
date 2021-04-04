@@ -63,3 +63,43 @@ const index = ({ paciente }) => {
 };
 
 export default index;
+
+//Revisa si un elemento ya esta en el diagnostico funcion alternativa sin lodash
+  /*const subcategoriaExiste = (elemento) => {
+    let verificacion = false;
+    for (let i = 0; i < enfermedades.length; i++) {
+      if (enfermedades[i].codigo == elemento.codigo) {
+        verificacion = true;
+        break;
+      }
+    }
+    return verificacion;
+  };*/
+
+
+  useMemo(() => {
+    const fetchCategorias = async () => {
+      const {
+        data: { data: categorias },
+      } = await axios.get(
+        `${process.env.apiURL}/categoriascodigo/${categoriasQuery}`
+      );
+      setcategoriasResults(categorias);
+    };
+    const fetchSubcategorias = async () => {
+      const {
+        data: { data: subcategorias },
+      } = await axios.get(
+        `${process.env.apiURL}/subcategoriascodigo/${subcategoriasQuery}`
+      );
+      setsubCategoriasRestuls(subcategorias);
+    };
+
+    categoriasQuery.length >= 2 && categoriasQuery.length <= 4
+      ? fetchCategorias()
+      : setcategoriasResults([]);
+
+    subcategoriasQuery.length >= 3
+      ? fetchSubcategorias()
+      : setsubCategoriasRestuls([]);
+  }, [categoriasQuery, subcategoriasQuery]);

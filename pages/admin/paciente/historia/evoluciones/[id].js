@@ -31,12 +31,6 @@ export const getServerSideProps = async ({ query: { page = 1, id } }) => {
 
 const index = ({ data, paciente }) => {
   //----------Variables de estado de la pagina---------//
-  const [enfermedades, setenfermedades] = useState([
-    //estado previo de la variable
-    {
-      subcategoria_descripcion: '',
-    },
-  ]);
   const [loading, setloading] = useState(false); //define el loader de la página
   const [error, seterror] = useState(null); //si exsite un error se setea la var
   const [evolucion, setevolucion] = useState({
@@ -60,19 +54,8 @@ const index = ({ data, paciente }) => {
   //--------------Funciones de la página-----------//
   //Obtiene las enfermedades del paciente del CIE10
   const handleShowInfo = async (evolucion_m) => {
-    setloading(true);
-    try {
-      const { data: enfermedades_CIE10 } = await axios.get(
-        `${process.env.apiURL}/enfermedadespaciente/${paciente.paciente_id}/${evolucion_m.evolucion_id}`
-      );
-      setenfermedades(enfermedades_CIE10);
-      setevolucion(evolucion_m);
-      setloading(false);
-      setshowInfo(true);
-    } catch (error) {
-      seterror(error);
-      setloading(false);
-    }
+    setevolucion(evolucion_m);
+    setshowInfo(true);
   };
   //Controla cuando aparece el modal de eliminación
   const handleModalDelete = (evolucion_m) => {
@@ -116,7 +99,6 @@ const index = ({ data, paciente }) => {
           show={showInfo}
           handleClose={() => setshowInfo(false)}
           paciente={paciente}
-          enfermedades={enfermedades}
           evolucion={evolucion}
         />
       )}
