@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomizedTables({
+export default function PacientesMUI({
   pacientes,
   handleModalDelete,
   handleShowInfo,

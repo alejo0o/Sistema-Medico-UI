@@ -44,6 +44,7 @@ const Diagnostico = ({
               name='categoria'
               type='text'
               placeholder='Categoria'
+              value={categoriasQuery}
               onChange={handleChangeCategoria}
             />
             <Boton onClick={handleSearchCategorias}>

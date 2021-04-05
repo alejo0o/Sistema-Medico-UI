@@ -9,7 +9,7 @@ import AdminLayout from '@/components/Layouts/AdminLayout';
 import Pagination from '@/components/Admin/Pagination/Paginated';
 import ModalInfoPaciente from '@/components/Admin/Modales/InfoPaciente';
 import ModalEliminar from '@/components/Admin/Modales/ModalEliminar';
-import PacientesTableMUI from '@/components/Admin/Tables/PacientesMUI.js';
+import PacientesTable from '@/components/Admin/Tables/PacientesTable';
 
 export const getServerSideProps = async ({ query: { page = 1 } }) => {
   const { data } = await axios.get(
@@ -60,8 +60,7 @@ const index = ({ data }) => {
 
   //-------------Funciones de la página------------//
   useMemo(() => {
-    if (pacientesQuery.trim().length == 0)
-      setpacientesQueryResultados(pacientes);
+    if (pacientesQuery.trim().length == 0) setpacientesQueryResultados();
   }, [pacientesQuery]);
   //Controla cuando aparece el modal de información y
   //consulta si existe una historia clinica con el paciente asociado
@@ -131,7 +130,7 @@ const index = ({ data }) => {
   return (
     <AdminLayout>
       {loading && <LinearProgress />}
-      <PacientesTableMUI
+      <PacientesTable
         pacientes={pacientesQueryResultados ?? pacientes}
         handleShowInfo={handleShowInfo}
         handleModalDelete={handleModalDelete}

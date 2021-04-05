@@ -15,7 +15,7 @@ const EliminarPaciente = ({
       <Modal.Body>{mensaje}</Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={handleClose}>
-          Close
+          Cerrar
         </Button>
         <Button variant='danger' onClick={handleDelete}>
           Eliminar <i className='fas fa-trash-alt' />
