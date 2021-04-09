@@ -15,6 +15,8 @@ export const Boton = styled(Button)`
         return 'linear-gradient(to right, #348F50 0%, #56B4D3  51%, #348F50  100%)';
       case 'gray':
         return 'linear-gradient(to right, #bdc3c7 0%, #2c3e50  51%, #bdc3c7  100%)';
+      case 'blue-variant':
+        return 'linear-gradient(to right, #000046 0%, #1CB5E0  51%, #000046  100%)';
       default:
         return 'linear-gradient(to right, #36D1DC 0%, #5B86E5  51%, #36D1DC  100%)';
     }
