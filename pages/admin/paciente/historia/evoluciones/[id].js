@@ -1,35 +1,51 @@
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import LinearProgress from '@material-ui/core/LinearProgress';
 //Componentes
 import AdminLayout from '@/components/Layouts/AdminLayout';
 import Pagination from '@/components/Admin/Pagination/Paginated';
-import EvolucionesTable from '@/components/Admin/Tables/Evoluciones';
 import ModalInfoEvolucion from '@/components/Admin/Modales/InfoEvolucion';
 import ModalEliminar from '@/components/Admin/Modales/ModalEliminar';
 import EvolucionesTableMUI from '@/components/Admin/Tables/EvolucionesMUI';
+//Auth
+import withSession from '@/components/utils/session';
+import axios from '@/components/utils/axios-helper';
 
-export const getServerSideProps = async ({ query: { page = 1, id } }) => {
-  //Retorna las evoluciones del paciente con el id indicado
-  const { data } = await axios.get(
-    `${process.env.apiURL}/evolucionespaciente/${id}`
-  );
-  //Retorna el paciente con el id indicado
-  const { data: paciente } = await axios.get(
-    `${process.env.apiURL}/pacientes/${id}`
-  );
+export const getServerSideProps = withSession(
+  async ({ query: { page = 1, id }, req }) => {
+    //Revisa si el usuario esta seteado antes de hacer la petición
+    const user = req.session.get('user');
 
-  return {
-    props: {
-      data,
-      paciente,
-      page,
-    },
-  };
-};
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
 
-const index = ({ data, paciente }) => {
+    //Retorna las evoluciones del paciente con el id indicado
+    const { data } = await axios(user.token).get(
+      `/v1/evolucionespaciente/${id}`
+    );
+    //Retorna el paciente con el id indicado
+    const { data: paciente } = await axios(user.token).get(
+      `/v1/pacientes/${id}`
+    );
+
+    return {
+      props: {
+        data,
+        paciente,
+        page,
+        user,
+      },
+    };
+  }
+);
+
+const index = ({ data, paciente, user }) => {
   //----------Variables de estado de la pagina---------//
   const [loading, setloading] = useState(false); //define el loader de la página
   const [error, seterror] = useState(null); //si exsite un error se setea la var
@@ -66,8 +82,8 @@ const index = ({ data, paciente }) => {
   const handleDelete = async () => {
     setloading(true);
     try {
-      const response = await axios.delete(
-        `${process.env.apiURL}/evoluciones/${evolucion.evolucion_id}`
+      const response = await axios(user.token).delete(
+        `/v1/evoluciones/${evolucion.evolucion_id}`
       );
       if (response.status == 204) {
         setloading(false);

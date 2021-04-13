@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { LinearProgress } from '@material-ui/core';
 //Componentes
@@ -6,19 +5,38 @@ import NuevoPaciente from '@/components/Admin/Forms/CrearPaciente';
 import AdminLayout from '@/components/Layouts/AdminLayout';
 import ModalSuccess from '@/components/Admin/Modales/ModalSuccess';
 import ModalError from '@/components/Admin/Modales/ModalError';
+//Auth
+import withSession from '@/components/utils/session';
+import axios from '@/components/utils/axios-helper';
 
-export const getStaticProps = async () => {
-  const { data: etnias } = await axios.get(`${process.env.apiURL}/etnias`);
-  const { data: niveles_instruccion } = await axios.get(
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  //Revisa si el usuario esta seteado antes de hacer la petición
+  const user = req.session.get('user');
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  const { data: etnias } = await axios(user.token).get(
+    `${process.env.apiURL}/etnias`
+  );
+  const { data: niveles_instruccion } = await axios(user.token).get(
     `${process.env.apiURL}/nivelesdeinstruccion`
   );
-  const { data: tipos_sangre } = await axios.get(
+  const { data: tipos_sangre } = await axios(user.token).get(
     `${process.env.apiURL}/tiposdesangre`
   );
-  const { data: estados_civiles } = await axios.get(
+  const { data: estados_civiles } = await axios(user.token).get(
     `${process.env.apiURL}/estadosciviles`
   );
-  const { data: generos } = await axios.get(`${process.env.apiURL}/generos`);
+  const { data: generos } = await axios(user.token).get(
+    `${process.env.apiURL}/generos`
+  );
 
   return {
     props: {
@@ -27,9 +45,10 @@ export const getStaticProps = async () => {
       tipos_sangre,
       estados_civiles,
       generos,
+      user,
     },
   };
-};
+});
 
 const index = ({
   etnias,
@@ -37,6 +56,7 @@ const index = ({
   tipos_sangre,
   estados_civiles,
   generos,
+  user,
 }) => {
   //-----Variables de estado de la página-----//
   const [error, seterror] = useState(null); //si existe un error se setea la variable
@@ -76,10 +96,7 @@ const index = ({
     event.preventDefault();
     setloading(true);
     try {
-      const response = await axios.post(
-        `${process.env.apiURL}/pacientes`,
-        paciente
-      );
+      const response = await axios(user.token).post(`/v1/pacientes`, paciente);
       if (response.status == 201) {
         setloading(false);
         setmodalSuccess(true);

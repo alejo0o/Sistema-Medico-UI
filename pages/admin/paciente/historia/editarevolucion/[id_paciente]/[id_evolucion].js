@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState, useEffect, useMemo } from 'react';
 import nProgress from 'nprogress';
 import _ from 'lodash';
@@ -7,31 +6,47 @@ import ModalSuccess from '@/components/Admin/Modales/ModalSuccess';
 import ModalError from '@/components/Admin/Modales/ModalError';
 import EditarEvolucion from '@/components/Admin/Forms/EditarEvolucion';
 import { LinearProgress } from '@material-ui/core';
+//Auth
+import withSession from '@/components/utils/session';
+import axios from '@/components/utils/axios-helper';
 
-export const getServerSideProps = async ({
-  query: { id_paciente, id_evolucion },
-}) => {
-  const { data: evolucion } = await axios.get(
-    `${process.env.apiURL}/evoluciones/${id_evolucion}`
-  );
+export const getServerSideProps = withSession(
+  async ({ query: { id_paciente, id_evolucion }, req }) => {
+    //Revisa si el usuario esta seteado antes de hacer la petición
+    const user = req.session.get('user');
 
-  const { data: paciente } = await axios.get(
-    `${process.env.apiURL}/pacientes/${id_paciente}`
-  );
-  if (!evolucion)
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
+
+    const { data: evolucion } = await axios(user.token).get(
+      `${process.env.apiURL}/evoluciones/${id_evolucion}`
+    );
+
+    const { data: paciente } = await axios(user.token).get(
+      `${process.env.apiURL}/pacientes/${id_paciente}`
+    );
+    if (!evolucion)
+      return {
+        notFound: true,
+      };
+
     return {
-      notFound: true,
+      props: {
+        evolucion,
+        paciente,
+        user,
+      },
     };
+  }
+);
 
-  return {
-    props: {
-      evolucion,
-      paciente,
-    },
-  };
-};
-
-const index = ({ evolucion, paciente }) => {
+const index = ({ evolucion, paciente, user }) => {
   //----------Variables de estado de la pagina---------//
   const [error, seterror] = useState(null); //si existe un error se setea la variable
   const [loading, setloading] = useState(false);
@@ -84,8 +99,8 @@ const index = ({ evolucion, paciente }) => {
     event.preventDefault();
     nProgress.start();
     try {
-      const response = await axios.put(
-        `${process.env.apiURL}/evoluciones/${evolucionEdit.evolucion_id}`,
+      const response = await axios(user.token).put(
+        `/v1/evoluciones/${evolucionEdit.evolucion_id}`,
         evolucionEdit
       );
       if (response.status == 200) {
@@ -139,8 +154,8 @@ const index = ({ evolucion, paciente }) => {
       try {
         const {
           data: { data: categorias },
-        } = await axios.get(
-          `${process.env.apiURL}/categoriascodigo/${categoriasQuery}`
+        } = await axios(user.token).get(
+          `/v1/categoriascodigo/${categoriasQuery}`
         );
         setcategoriasResults(categorias);
         setloading(false);
@@ -159,8 +174,8 @@ const index = ({ evolucion, paciente }) => {
       try {
         const {
           data: { data: subcategorias },
-        } = await axios.get(
-          `${process.env.apiURL}/subcategoriascodigo/${subcategoriasQuery}`
+        } = await axios(user.token).get(
+          `/v1/subcategoriascodigo/${subcategoriasQuery}`
         );
         setsubCategoriasRestuls(subcategorias);
         setloading(false);

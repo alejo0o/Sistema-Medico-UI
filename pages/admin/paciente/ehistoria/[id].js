@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import nProgress from 'nprogress';
 //Componentes
@@ -6,15 +5,30 @@ import AdminLayout from '@/components/Layouts/AdminLayout';
 import EditarHistoria from '@/components/Admin/Forms/EditarHistoriaClinica';
 import ModalSuccess from '@/components/Admin/Modales/ModalSuccess';
 import ModalError from '@/components/Admin/Modales/ModalError';
+//Auth
+import withSession from '@/components/utils/session';
+import axios from '@/components/utils/axios-helper';
 
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps = withSession(async ({ params, req }) => {
+  //Revisa si el usuario esta seteado antes de hacer la petición
+  const user = req.session.get('user');
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
   //Obtiene el paciente con el id indicado
-  const { data: paciente } = await axios.get(
-    `${process.env.apiURL}/pacientes/${params?.id}`
+  const { data: paciente } = await axios(user.token).get(
+    `/v1/pacientes/${params?.id}`
   );
   //Obtiene la historia clinica del paciente indicado
-  const { data: historiaClinica } = await axios.get(
-    `${process.env.apiURL}/historiaclinicapaciente/${params?.id}`
+  const { data: historiaClinica } = await axios(user.token).get(
+    `/v1/historiaclinicapaciente/${params?.id}`
   );
 
   if (!historiaClinica)
@@ -32,11 +46,12 @@ export const getServerSideProps = async ({ params }) => {
     props: {
       paciente,
       historiaClinica,
+      user,
     },
   };
-};
+});
 
-const index = ({ paciente, historiaClinica }) => {
+const index = ({ paciente, historiaClinica, user }) => {
   //----------Variables de estado de la pagina---------//
   const [error, seterror] = useState(null); //si existe un error se setea la variable
   const [historia_clinica, sethistoria_clinica] = useState({
@@ -75,8 +90,8 @@ const index = ({ paciente, historiaClinica }) => {
     event.preventDefault();
     nProgress.start();
     try {
-      const response = await axios.put(
-        `${process.env.apiURL}/historiasclinicas/${historia_clinica.historia_clinica_id}`,
+      const response = await axios(user.token).put(
+        `/v1/historiasclinicas/${historia_clinica.historia_clinica_id}`,
         historia_clinica
       );
       if (response.status == 200) {

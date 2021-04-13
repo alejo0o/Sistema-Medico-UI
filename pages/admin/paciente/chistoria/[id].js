@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { LinearProgress } from '@material-ui/core';
@@ -7,20 +6,35 @@ import AdminLayout from '@/components/Layouts/AdminLayout';
 import NuevaHistoria from '@/components/Admin/Forms/CrearHistoriaClinica';
 import ModalSuccess from '@/components/Admin/Modales/ModalSuccess';
 import ModalError from '@/components/Admin/Modales/ModalError';
+//Auth
+import withSession from '@/components/utils/session';
+import axios from '@/components/utils/axios-helper';
 
-export const getServerSideProps = async ({ params }) => {
-  const { data: paciente } = await axios.get(
-    `${process.env.apiURL}/pacientes/${params?.id}`
+export const getServerSideProps = withSession(async ({ params, req, res }) => {
+  //Revisa si el usuario esta seteado antes de hacer la petición
+  const user = req.session.get('user');
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  const { data: paciente } = await axios(user.token).get(
+    `/v1/pacientes/${params?.id}`
   );
-
   return {
     props: {
       paciente,
+      user,
     },
   };
-};
+});
 
-const index = ({ paciente }) => {
+const index = ({ paciente, user }) => {
   //----------Variables de estado de la pagina---------//
   const [error, seterror] = useState(null); //si existe un error se setea la variable
   const [loading, setloading] = useState(false);
@@ -58,8 +72,8 @@ const index = ({ paciente }) => {
     event.preventDefault();
     setloading(true);
     try {
-      const response = await axios.post(
-        `${process.env.apiURL}/historiasclinicas`,
+      const response = await axios(user.token).post(
+        '/v1/historiasclinicas',
         historia_clinica
       );
       if (response.status == 201) {

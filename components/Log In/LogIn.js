@@ -8,6 +8,7 @@ import {
   Lock,
 } from '@material-ui/icons';
 import {
+  CircularProgress,
   FormControl,
   Grid,
   IconButton,
@@ -23,7 +24,7 @@ import {
 } from './LoginStyles';
 import { Boton } from '@/components/CommonStyles/CommonStyles';
 
-const LogIn = ({ handleSubmit }) => {
+const LogIn = ({ handleSubmit, loading }) => {
   const classes = styles();
   const matches = useMediaQuery('(max-width:768px)');
   const [showPassword, setshowPassword] = useState(false);
@@ -78,7 +79,12 @@ const LogIn = ({ handleSubmit }) => {
               <Grid item>
                 <CssTextField
                   id='standard-adornment-password'
+                  className={classes.root}
+                  InputProps={{
+                    className: classes.input,
+                  }}
                   name='password'
+                  autoComplete='on'
                   label='Constraseña'
                   type={showPassword ? 'text' : 'password'}
                 />
@@ -99,7 +105,11 @@ const LogIn = ({ handleSubmit }) => {
             type='submit'
             className={matches ? 'w-50' : 'w-100'}
             color='blue-variant'>
-            Log In
+            {loading ? (
+              <CircularProgress color='secondary' size='1.5em' />
+            ) : (
+              'Log In'
+            )}
           </Boton>
         </Form>
       </FormBox>

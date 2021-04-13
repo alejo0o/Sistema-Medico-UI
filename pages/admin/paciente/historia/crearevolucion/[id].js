@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState, useEffect, useMemo } from 'react';
 import nProgress from 'nprogress';
 import _ from 'lodash';
@@ -8,23 +7,40 @@ import CrearEvolucion from '@/components/Admin/Forms/CrearEvolucion';
 import ModalSuccess from '@/components/Admin/Modales/ModalSuccess';
 import ModalError from '@/components/Admin/Modales/ModalError';
 import { LinearProgress } from '@material-ui/core';
+//Auth
+import withSession from '@/components/utils/session';
+import axios from '@/components/utils/axios-helper';
 
-export const getServerSideProps = async ({ params }) => {
-  const { data: historiaClinica } = await axios.get(
+export const getServerSideProps = withSession(async ({ params, req }) => {
+  //Revisa si el usuario esta seteado antes de hacer la petición
+  const user = req.session.get('user');
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  //Obtiene la historia clinica del paciente indicado
+  const { data: historiaClinica } = await axios(user.token).get(
     `${process.env.apiURL}/historiaclinicapaciente/${params?.id}`
   );
-  const { data: paciente } = await axios.get(
+  //Extrae los datos del paciente indicado
+  const { data: paciente } = await axios(user.token).get(
     `${process.env.apiURL}/pacientes/${params?.id}`
   );
   return {
     props: {
       paciente,
       historiaClinica,
+      user,
     },
   };
-};
+});
 
-const index = ({ paciente, historiaClinica }) => {
+const index = ({ paciente, historiaClinica, user }) => {
   /*-------------Variables de estado de la pagina-------------*/
   const [error, seterror] = useState(null); //si existe un error se setea la variable
   const [loading, setloading] = useState(false);
@@ -74,8 +90,8 @@ const index = ({ paciente, historiaClinica }) => {
     nProgress.start();
 
     try {
-      const response = await axios.post(
-        `${process.env.apiURL}/evoluciones`,
+      const response = await axios(user.token).post(
+        `/v1/evoluciones`,
         evolucion
       );
       if (response.status == 201) {
@@ -128,8 +144,8 @@ const index = ({ paciente, historiaClinica }) => {
       try {
         const {
           data: { data: categorias },
-        } = await axios.get(
-          `${process.env.apiURL}/categoriascodigo/${categoriasQuery}`
+        } = await axios(user.token).get(
+          `/v1/categoriascodigo/${categoriasQuery}`
         );
         setcategoriasResults(categorias);
         setloading(false);
@@ -148,8 +164,8 @@ const index = ({ paciente, historiaClinica }) => {
       try {
         const {
           data: { data: subcategorias },
-        } = await axios.get(
-          `${process.env.apiURL}/subcategoriascodigo/${subcategoriasQuery}`
+        } = await axios(user.token).get(
+          `/v1/subcategoriascodigo/${subcategoriasQuery}`
         );
         setsubCategoriasRestuls(subcategorias);
         setloading(false);

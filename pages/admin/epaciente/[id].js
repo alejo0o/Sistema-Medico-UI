@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import nProgress from 'nprogress';
 //Componentes
@@ -6,10 +5,25 @@ import AdminLayout from '@/components/Layouts/AdminLayout';
 import EditarPaciente from '@/components/Admin/Forms/EditarPaciente';
 import ModalSuccess from '@/components/Admin/Modales/ModalSuccess';
 import ModalError from '@/components/Admin/Modales/ModalError';
+//Auth
+import withSession from '@/components/utils/session';
+import axios from '@/components/utils/axios-helper';
 
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps = withSession(async ({ params, req }) => {
+  //Revisa si el usuario esta seteado antes de hacer la petición
+  const user = req.session.get('user');
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
   //Obtiene el paciente con el id indicado
-  const { data: paciente } = await axios.get(
+  const { data: paciente } = await axios(user.token).get(
     `${process.env.apiURL}/pacientes/${params?.id}`
   );
   if (!paciente)
@@ -17,17 +31,21 @@ export const getServerSideProps = async ({ params }) => {
       notFound: true,
     };
   //--------Extrae los valores de etnias,educación,sangre y estado civil----//
-  const { data: etnias } = await axios.get(`${process.env.apiURL}/etnias`);
-  const { data: niveles_instruccion } = await axios.get(
+  const { data: etnias } = await axios(user.token).get(
+    `${process.env.apiURL}/etnias`
+  );
+  const { data: niveles_instruccion } = await axios(user.token).get(
     `${process.env.apiURL}/nivelesdeinstruccion`
   );
-  const { data: tipos_sangre } = await axios.get(
+  const { data: tipos_sangre } = await axios(user.token).get(
     `${process.env.apiURL}/tiposdesangre`
   );
-  const { data: estados_civiles } = await axios.get(
+  const { data: estados_civiles } = await axios(user.token).get(
     `${process.env.apiURL}/estadosciviles`
   );
-  const { data: generos } = await axios.get(`${process.env.apiURL}/generos`);
+  const { data: generos } = await axios(user.token).get(
+    `${process.env.apiURL}/generos`
+  );
 
   //Retira los espacios innecesarios que traen los datos
   Object.keys(paciente).forEach(function (key) {
@@ -42,9 +60,10 @@ export const getServerSideProps = async ({ params }) => {
       tipos_sangre,
       estados_civiles,
       generos,
+      user,
     },
   };
-};
+});
 
 const index = ({
   etnias,
@@ -53,6 +72,7 @@ const index = ({
   estados_civiles,
   generos,
   paciente,
+  user,
 }) => {
   //-----Variables de estado de la página-----//
   const [error, seterror] = useState(null); //si existe un error se setea la var
@@ -96,8 +116,8 @@ const index = ({
     event.preventDefault();
     nProgress.start();
     try {
-      const response = await axios.put(
-        `${process.env.apiURL}/pacientes/${pacienteEdit.paciente_id}`,
+      const response = await axios(user.token).put(
+        `/v1/pacientes/${pacienteEdit.paciente_id}`,
         pacienteEdit
       );
       if (response.status == 200) {

@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import nProgress from 'nprogress';
 import { LinearProgress } from '@material-ui/core';
+import PropTypes from 'prop-types';
 //Componentes
 import { getEdad } from '@/components/utils/utils';
 import AdminLayout from '@/components/Layouts/AdminLayout';
@@ -10,21 +10,37 @@ import Pagination from '@/components/Admin/Pagination/Paginated';
 import ModalInfoPaciente from '@/components/Admin/Modales/InfoPaciente';
 import ModalEliminar from '@/components/Admin/Modales/ModalEliminar';
 import PacientesTable from '@/components/Admin/Tables/PacientesTable';
+//Helper para la verificación del usuario
+import withSession from '@/components/utils/session';
+import axios from '@/components/utils/axios-helper';
 
-export const getServerSideProps = async ({ query: { page = 1 } }) => {
-  const { data } = await axios.get(
-    `${process.env.apiURL}/pacientes?page=${page}`
-  );
+export const getServerSideProps = withSession(
+  async ({ query: { page = 1 }, req, res }) => {
+    //Revisa si el usuario esta seteado antes de hacer la petición
+    const user = req.session.get('user');
 
-  return {
-    props: {
-      data,
-      page,
-    },
-  };
-};
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
 
-const index = ({ data }) => {
+    const { data } = await axios(user.token).get(`/v1/pacientes?page=${page}`);
+
+    return {
+      props: {
+        data,
+        page,
+        user,
+      },
+    };
+  }
+);
+
+const index = ({ data, user }) => {
   /*-------------Variables de estado de la pagina-------------*/
   const [error, seterror] = useState(null); //si existe un error se setea la var
   const [loading, setloading] = useState(false);
@@ -67,9 +83,10 @@ const index = ({ data }) => {
   const handleShowInfo = async (paciente_info) => {
     setloading(true);
     setpaciente(paciente_info);
+    console.log(paciente_info);
     try {
-      const { data } = await axios.get(
-        `${process.env.apiURL}/historiaclinicapaciente/${paciente_info.paciente_id}`
+      const { data } = await axios(user.token).get(
+        `/v1/historiaclinicapaciente/${paciente_info.paciente_id}`
       );
       data ? sethistoria_clinica(true) : sethistoria_clinica(false);
     } catch (error_peticion) {
@@ -88,8 +105,8 @@ const index = ({ data }) => {
   const handleDelete = async () => {
     nProgress.start();
     try {
-      const response = await axios.delete(
-        `${process.env.apiURL}/pacientes/${paciente.paciente_id}`
+      const response = await axios(user.token).delete(
+        `/v1/pacientes/${paciente.paciente_id}`
       );
       if (response.status == 204) {
         nProgress.done();
@@ -113,8 +130,8 @@ const index = ({ data }) => {
       try {
         const {
           data: { data: pacientesResultados },
-        } = await axios.get(
-          `${process.env.apiURL}/getpacientesbusqueda/${pacientesQuery.trim()}`
+        } = await axios(user.token).get(
+          `/v1/getpacientesbusqueda/${pacientesQuery.trim()}`
         );
         setpacientesQueryResultados(pacientesResultados);
         setloading(false);
@@ -160,3 +177,10 @@ const index = ({ data }) => {
 };
 
 export default index;
+
+index.propTypes = {
+  user: PropTypes.shape({
+    isLoggedIn: PropTypes.bool,
+    login: PropTypes.string,
+  }),
+};
