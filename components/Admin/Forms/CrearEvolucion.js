@@ -49,7 +49,7 @@ const CrearEvolucion = ({
 
           {paciente.genero_id != 1 ? (
             <Form.Group as={Col} sm='4'>
-              <Form.Label>Fecha Última Menstruación:</Form.Label>
+              <Form.Label>Fecha Última Menstruación (opcional):</Form.Label>
               <Form.Control
                 onChange={handleaChange}
                 name='fecha_ultima_menstruacion'
@@ -112,7 +112,7 @@ const CrearEvolucion = ({
           </Form.Group>
 
           <Form.Group as={Col} sm='4'>
-            <Form.Label>Proximo Control:</Form.Label>
+            <Form.Label>Proximo Control (opcional):</Form.Label>
             <Form.Control
               onChange={handleaChange}
               name='proximo_control'

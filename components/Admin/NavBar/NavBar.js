@@ -1,6 +1,7 @@
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
+import axios from 'axios';
 //Material
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -8,6 +9,18 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const NavBar = ({ router, handleDrawerToggle }) => {
   const matches = useMediaQuery('(max-width:991px)');
+
+  const handleLogout = () => {
+    axios
+      .post('/api/auth/logout')
+      .then((response) => {
+        if (response.status == 200) router.push('/');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Navbar expand='lg' style={{ background: '#00A5E9' }} sticky='top'>
       <Nav.Item>
@@ -40,11 +53,9 @@ const NavBar = ({ router, handleDrawerToggle }) => {
             <i className='fas fa-arrow-circle-left' /> Regresar
           </Button>
 
-          <Link href='/'>
-            <a className='btn btn-light'>
-              Log Out <i className='fas fa-sign-out-alt' />
-            </a>
-          </Link>
+          <Button variant='light' onClick={handleLogout}>
+            Log Out <i className='fas fa-sign-out-alt' />
+          </Button>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

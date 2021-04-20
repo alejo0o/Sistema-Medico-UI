@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import nProgress from 'nprogress';
+import { useState } from 'react';
+import { LinearProgress } from '@material-ui/core';
 //Componentes
 import AdminLayout from '@/components/Layouts/AdminLayout';
 import EditarPaciente from '@/components/Admin/Forms/EditarPaciente';
@@ -24,28 +24,24 @@ export const getServerSideProps = withSession(async ({ params, req }) => {
 
   //Obtiene el paciente con el id indicado
   const { data: paciente } = await axios(user.token).get(
-    `${process.env.apiURL}/pacientes/${params?.id}`
+    `/v1/pacientes/${params?.id}`
   );
   if (!paciente)
     return {
       notFound: true,
     };
   //--------Extrae los valores de etnias,educación,sangre y estado civil----//
-  const { data: etnias } = await axios(user.token).get(
-    `${process.env.apiURL}/etnias`
-  );
+  const { data: etnias } = await axios(user.token).get(`/v1/etnias`);
   const { data: niveles_instruccion } = await axios(user.token).get(
-    `${process.env.apiURL}/nivelesdeinstruccion`
+    `/v1/nivelesdeinstruccion`
   );
   const { data: tipos_sangre } = await axios(user.token).get(
-    `${process.env.apiURL}/tiposdesangre`
+    `/v1/tiposdesangre`
   );
   const { data: estados_civiles } = await axios(user.token).get(
-    `${process.env.apiURL}/estadosciviles`
+    `/v1/estadosciviles`
   );
-  const { data: generos } = await axios(user.token).get(
-    `${process.env.apiURL}/generos`
-  );
+  const { data: generos } = await axios(user.token).get(`/v1/generos`);
 
   //Retira los espacios innecesarios que traen los datos
   Object.keys(paciente).forEach(function (key) {
@@ -76,62 +72,33 @@ const index = ({
 }) => {
   //-----Variables de estado de la página-----//
   const [error, seterror] = useState(null); //si existe un error se setea la var
-  const [pacienteEdit, setpacienteEdit] = useState({
-    //estado previo de la variable
-    apellidos: '',
-    cedula: '',
-    contacto_emergencia_nombre: '',
-    contacto_emergencia_telefono: '',
-    direccion: '',
-    estado_civil_id: '',
-    etnia_id: '',
-    genero_id: '',
-    fechanacimiento: '',
-    lugarnacimiento: '',
-    nivel_de_instruccion_id: '',
-    nombres: '',
-    numero_hijos: '',
-    ocupacion: '',
-    paciente_id: '',
-    telefono: '',
-    tipo_de_sangre_id: '',
-  });
+  const [loading, setloading] = useState(false);
   const [modalSuccess, setmodalSuccess] = useState(false); //modal de éxito
   const [modalError, setmodalError] = useState(false); //modal de error
-  //-----Props de la página--------//
 
   //-----Funciones de la página---------//
-  useEffect(() => {
-    setpacienteEdit(paciente); //setea el paciente a editar
-  }, []);
-  //Maneja los cambios en el formulario
-  const handleChange = (event) => {
-    setpacienteEdit({
-      ...pacienteEdit,
-      [event.target.name]: event.target.value,
-    });
-  };
+
   //Maneja la petición de editar
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    nProgress.start();
+  const handleSubmit = async (values) => {
+    setloading(true);
     try {
       const response = await axios(user.token).put(
-        `/v1/pacientes/${pacienteEdit.paciente_id}`,
-        pacienteEdit
+        `/v1/pacientes/${paciente.paciente_id}`,
+        values
       );
       if (response.status == 200) {
-        nProgress.done();
+        setloading(false);
         setmodalSuccess(true);
       }
     } catch (error_peticion) {
       seterror(error_peticion);
       setmodalError(true);
-      nProgress.done();
+      setloading(false);
     }
   };
   return (
     <AdminLayout>
+      {loading && <LinearProgress />}
       <EditarPaciente
         tipos_sangre={tipos_sangre}
         estados_civiles={estados_civiles}
@@ -139,8 +106,7 @@ const index = ({
         etnias={etnias}
         generos={generos}
         handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        paciente={pacienteEdit}
+        paciente={paciente}
       />
       {/*----------Modal de petición exitosa------- */}
       <ModalSuccess

@@ -12,7 +12,7 @@ import { getEdad } from '@/components/utils/utils';
 export const getStaticPaths = async () => {
   const {
     data: { data },
-  } = await axios.get(`${process.env.apiURL}/getpacientes`);
+  } = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/getpacientes`);
 
   const paths = data.map(({ paciente_id }) => ({
     params: { id: paciente_id.toString() },
@@ -25,7 +25,7 @@ export const getStaticPaths = async () => {
 };
 export const getStaticProps = async ({ params }) => {
   const { data: paciente } = await axios.get(
-    `${process.env.apiURL}/pacientes/${params?.id}`
+    `${process.env.NEXT_PUBLIC_APIURL}/pacientes/${params?.id}`
   );
 
   return {

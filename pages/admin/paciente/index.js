@@ -22,21 +22,17 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
     };
   }
 
-  const { data: etnias } = await axios(user.token).get(
-    `${process.env.apiURL}/etnias`
-  );
+  const { data: etnias } = await axios(user.token).get(`/v1/etnias`);
   const { data: niveles_instruccion } = await axios(user.token).get(
-    `${process.env.apiURL}/nivelesdeinstruccion`
+    `/v1/nivelesdeinstruccion`
   );
   const { data: tipos_sangre } = await axios(user.token).get(
-    `${process.env.apiURL}/tiposdesangre`
+    `/v1/tiposdesangre`
   );
   const { data: estados_civiles } = await axios(user.token).get(
-    `${process.env.apiURL}/estadosciviles`
+    `/v1/estadosciviles`
   );
-  const { data: generos } = await axios(user.token).get(
-    `${process.env.apiURL}/generos`
-  );
+  const { data: generos } = await axios(user.token).get(`/v1/generos`);
 
   return {
     props: {
@@ -78,25 +74,17 @@ const index = ({
     nombres: '',
     numero_hijos: '',
     ocupacion: '',
-    paciente_id: '',
     telefono: '',
+    email: '',
   });
   const [modalSuccess, setmodalSuccess] = useState(false); //modal de éxito
   const [modalError, setmodalError] = useState(false); //modal de error
   //-----Funciones de la página---------//
-  //Maneja los cambios dentro de la variable paciente
-  const handleChange = (event) => {
-    setpaciente({
-      ...paciente,
-      [event.target.name]: event.target.value,
-    });
-  };
   //Realiza el submit (post) del formulario
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (values) => {
     setloading(true);
     try {
-      const response = await axios(user.token).post(`/v1/pacientes`, paciente);
+      const response = await axios(user.token).post(`/v1/pacientes`, values);
       if (response.status == 201) {
         setloading(false);
         setmodalSuccess(true);
@@ -118,7 +106,7 @@ const index = ({
         estados_civiles={estados_civiles}
         generos={generos}
         handleSubmit={handleSubmit}
-        handleaChange={handleChange}
+        paciente={paciente}
       />
       {/*----------Modal de petición exitosa------- */}
       <ModalSuccess

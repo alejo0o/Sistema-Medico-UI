@@ -118,7 +118,7 @@ const CrearHistoriaClinica = ({ handleSubmit, handleaChange, paciente }) => {
             </Form.Group>
           )}
           <Form.Group as={Col} sm='4'>
-            <Form.Label>Hábitos:</Form.Label>
+            <Form.Label>Hábitos (opcional):</Form.Label>
             <Form.Control name='habitos' as='textarea' placeholder='Hábitos' />
           </Form.Group>
         </Form.Row>

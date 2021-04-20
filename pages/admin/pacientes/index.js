@@ -83,10 +83,9 @@ const index = ({ data, user }) => {
   const handleShowInfo = async (paciente_info) => {
     setloading(true);
     setpaciente(paciente_info);
-    console.log(paciente_info);
     try {
       const { data } = await axios(user.token).get(
-        `/v1/historiaclinicapaciente/${paciente_info.paciente_id}`
+        `/v1/existehistorial/${paciente_info.paciente_id}`
       );
       data ? sethistoria_clinica(true) : sethistoria_clinica(false);
     } catch (error_peticion) {
@@ -163,6 +162,7 @@ const index = ({ data, user }) => {
         paciente={paciente}
         getEdad={getEdad}
         historia_clinica={historia_clinica}
+        tipo_usuario={user.tipo}
       />
       {/*----------Modal para eliminar------- */}
       <ModalEliminar

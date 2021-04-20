@@ -10,6 +10,10 @@ import Paper from '@material-ui/core/Paper';
 import { Boton } from '@/components/CommonStyles/CommonStyles';
 import Link from 'next/link';
 import { Button } from 'react-bootstrap';
+import {
+  ButtonsContainer,
+  ButtonContainer,
+} from '@/components/Admin/HistoriaClinica/HistoriaClinicaStyle';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -46,15 +50,26 @@ export default function CustomizedTables({
   return (
     <div className='p-3'>
       <h2>{`${paciente.nombres} ${paciente.apellidos}`}</h2>
-      <h3>{`CI: ${paciente.cedula}`}</h3>
+      <h4>{`CI: ${paciente.cedula}`}</h4>
       <h4>Evoluciones</h4>
 
-      <Link
-        href={`/admin/paciente/historia/crearevolucion/${paciente.paciente_id}`}>
-        <Boton size='lg' color='blue' className='btn mb-2'>
-          Nueva Evolución
-        </Boton>
-      </Link>
+      <ButtonsContainer>
+        <ButtonContainer>
+          <Link
+            href={`/admin/paciente/historia/crearevolucion/${paciente.paciente_id}`}>
+            <Boton size='lg' color='blue' className='btn mb-2'>
+              Nueva Evolución
+            </Boton>
+          </Link>
+        </ButtonContainer>
+        <ButtonContainer>
+          <Link href={`/admin/paciente/historia/${paciente.paciente_id}`}>
+            <Boton size='lg' color='blue-variant' className='btn mb-2'>
+              Historia Clínica
+            </Boton>
+          </Link>
+        </ButtonContainer>
+      </ButtonsContainer>
 
       {/*-----------------Tabla-------------*/}
       <TableContainer component={Paper}>

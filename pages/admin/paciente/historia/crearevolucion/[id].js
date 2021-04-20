@@ -14,7 +14,7 @@ import axios from '@/components/utils/axios-helper';
 export const getServerSideProps = withSession(async ({ params, req }) => {
   //Revisa si el usuario esta seteado antes de hacer la petición
   const user = req.session.get('user');
-
+  //Redirecciona si no existe un usuario logeado
   if (!user) {
     return {
       redirect: {
@@ -23,14 +23,30 @@ export const getServerSideProps = withSession(async ({ params, req }) => {
       },
     };
   }
+  //Redirecciona al usuario que no tiene los permisos adecuados
+  if (user.tipo != 'medico' && user.tipo != 'admin') {
+    return {
+      redirect: {
+        destination: '/admin/pacientes',
+        permanent: false,
+      },
+    };
+  }
   //Obtiene la historia clinica del paciente indicado
   const { data: historiaClinica } = await axios(user.token).get(
-    `${process.env.apiURL}/historiaclinicapaciente/${params?.id}`
+    `/v1/historiaclinicapaciente/${params?.id}`
   );
   //Extrae los datos del paciente indicado
   const { data: paciente } = await axios(user.token).get(
-    `${process.env.apiURL}/pacientes/${params?.id}`
+    `/v1/pacientes/${params?.id}`
   );
+
+  if (!historiaClinica || !paciente) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       paciente,

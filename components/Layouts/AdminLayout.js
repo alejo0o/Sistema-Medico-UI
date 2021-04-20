@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import Drawer from '@/components/Admin/Drawer/SideDrawer';
 import NavBar from '@/components/Admin/NavBar/NavBar';
-import DrawerSkeleton from '@/components/Admin/Skeletons/DrawerSkeleton';
-import NavbarSkeleton from '@/components/Admin/Skeletons/NavbarSkeleton';
 
-const AdminLayout = ({ children, loading }) => {
+const AdminLayout = ({ children, miniDrawer }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -13,20 +11,13 @@ const AdminLayout = ({ children, loading }) => {
 
   return (
     <div className='d-flex'>
-      {loading ? (
-        <DrawerSkeleton />
-      ) : (
-        <Drawer
-          mobileOpen={mobileOpen}
-          handleDrawerToggle={handleDrawerToggle}
-        />
-      )}
+      <Drawer
+        mobileOpen={mobileOpen}
+        handleDrawerToggle={handleDrawerToggle}
+        miniDrawer={miniDrawer}
+      />
       <div className='w-100'>
-        {loading ? (
-          <NavbarSkeleton />
-        ) : (
-          <NavBar handleDrawerToggle={handleDrawerToggle} />
-        )}
+        <NavBar handleDrawerToggle={handleDrawerToggle} />
         {children}
       </div>
     </div>

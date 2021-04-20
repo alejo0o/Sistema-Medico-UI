@@ -4,17 +4,20 @@ import withSession from '@/components/utils/session';
 export default withSession(async (req, res) => {
   const { username, password } = req.body;
   try {
-    const response = await axios.post(`${process.env.API_URL}/auth/login`, {
-      username,
-      password,
-    });
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_APIURL}/auth/login`,
+      {
+        username,
+        password,
+      }
+    );
     if (response.status == 200) {
       const user = await axios.post(
-        `${process.env.API_URL}/auth/me`,
+        `${process.env.NEXT_PUBLIC_APIURL}/auth/me`,
         {},
         {
           headers: {
-            Authorization: `bearer ${response.data.access_token}`,
+            Authorization: `Bearer ${response.data.access_token}`,
           },
         }
       );
@@ -22,7 +25,7 @@ export default withSession(async (req, res) => {
       req.session.set('user', {
         id: user.data.id,
         isLoggedIn: true,
-        admin: user.data.user_type,
+        tipo: user.data.user_type,
         username: user.data.username,
         email: user.data.email,
         name: user.data.name,

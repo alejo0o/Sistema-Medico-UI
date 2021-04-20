@@ -14,11 +14,20 @@ import axios from '@/components/utils/axios-helper';
 export const getServerSideProps = withSession(async ({ params, req }) => {
   //Revisa si el usuario esta seteado antes de hacer la petición
   const user = req.session.get('user');
-
+  //Redirecciona si no existe un usuario logeado
   if (!user) {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  //Redirecciona al usuario que no tiene los permisos adecuados
+  if (user.tipo != 'medico' && user.tipo != 'admin') {
+    return {
+      redirect: {
+        destination: '/admin/pacientes',
         permanent: false,
       },
     };
@@ -30,6 +39,11 @@ export const getServerSideProps = withSession(async ({ params, req }) => {
   const { data: paciente } = await axios(user.token).get(
     `/v1/pacientes/${params?.id}`
   );
+  if (!historia_clinica || !paciente) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {

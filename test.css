@@ -4,15 +4,25 @@
   text-decoration: none;
   border: solid 10px black;
   color: inherit;
+  scroll-behavior: auto;
+  font-weight: 700;
+  font-size: ;
+
+  background: none;
+  scroll-behavior: auto;
+  font-size: small;
+  overflow: auto;
+  scrollbar-width: thin;
 }
 
 .btn-grad {
   background-image: linear-gradient(
     to right,
-    #1fa2ff 0%,
-    #12d8fa 51%,
-    #1fa2ff 100%
+    #00d2ff 0%,
+    #3a7bd5 51%,
+    #00d2ff 100%
   );
+  overflow-y: non;
 }
 .btn-grad {
   margin: 10px;
@@ -25,6 +35,12 @@
   box-shadow: 0 0 20px #eee;
   border-radius: 10px;
   display: block;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-top-right-radius: 15px;
+  max-width: ;
+  overflow: ;
 }
 
 .btn-grad:hover {

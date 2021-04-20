@@ -11,6 +11,7 @@ const InfoPaciente = ({
   paciente,
   getEdad,
   historia_clinica,
+  tipo_usuario,
 }) => {
   return (
     <Modal show={show} onHide={handleClose} size='lg'>
@@ -94,23 +95,33 @@ const InfoPaciente = ({
                 info={paciente.contacto_emergencia_telefono}
               />
             </StyledCol>
+            <StyledCol>
+              <Cell
+                labelName='Correo electrónico (paciente)'
+                info={paciente.email}
+              />
+            </StyledCol>
           </Row>
         </Col>
       </Modal.Body>
 
       <Modal.Footer>
-        {historia_clinica ? (
-          <Link href={`/admin/paciente/historia/${paciente.paciente_id}`}>
-            <a style={{ textDecoration: 'none' }}>
-              <Boton color='blue'>Historial Clínico</Boton>
-            </a>
-          </Link>
+        {tipo_usuario === 'medico' || tipo_usuario === 'admin' ? (
+          historia_clinica ? (
+            <Link href={`/admin/paciente/historia/${paciente.paciente_id}`}>
+              <a style={{ textDecoration: 'none' }}>
+                <Boton color='blue'>Historial Clínico</Boton>
+              </a>
+            </Link>
+          ) : (
+            <Link href={`/admin/paciente/chistoria/${paciente.paciente_id}`}>
+              <a style={{ textDecoration: 'none' }}>
+                <Boton color='blue'>Crear Historia Clínica</Boton>
+              </a>
+            </Link>
+          )
         ) : (
-          <Link href={`/admin/paciente/chistoria/${paciente.paciente_id}`}>
-            <a style={{ textDecoration: 'none' }}>
-              <Boton color='blue'>Crear Historia Clínica</Boton>
-            </a>
-          </Link>
+          <></>
         )}
         <Boton color='gray' onClick={handleClose}>
           Cerrar

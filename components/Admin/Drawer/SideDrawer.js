@@ -37,8 +37,47 @@ function ResponsiveDrawer(props) {
             <ListItemText primary={'Pacientes'} />
           </ListItem>
         </Link>
+        <Link href='/admin/citas'>
+          <ListItem button className={classes.styledLink}>
+            <ListItemIcon>
+              <i className='far fa-calendar-alt' />
+            </ListItemIcon>
+            <ListItemText primary={'Citas'} />
+          </ListItem>
+        </Link>
       </List>
     </div>
+  );
+  const miniDrawer = (
+    <List>
+      <ListItem button className={classes.styledLink}>
+        <ListItemIcon>
+          <i className='fas fa-hospital' style={{ fontSize: '2em' }} />
+        </ListItemIcon>
+      </ListItem>
+      <Divider />
+      <Link href='/admin/pacientes'>
+        <ListItem
+          button
+          className={classes.styledLink}
+          style={{ marginTop: '1em' }}>
+          <ListItemIcon>
+            <i className='fas fa-users' style={{ fontSize: '1.5em' }} />
+          </ListItemIcon>
+        </ListItem>
+      </Link>
+      <Divider />
+      <Link href='/admin/citas'>
+        <ListItem
+          button
+          className={classes.styledLink}
+          style={{ marginTop: '1em' }}>
+          <ListItemIcon>
+            <i className='far fa-calendar-alt' style={{ fontSize: '2em' }} />
+          </ListItemIcon>
+        </ListItem>
+      </Link>
+    </List>
   );
 
   const container =
@@ -61,6 +100,8 @@ function ResponsiveDrawer(props) {
           }}>
           {drawer}
         </Drawer>
+      ) : props.miniDrawer ? (
+        <div className={classes.miniDrawer}>{miniDrawer}</div>
       ) : (
         <div className={classes.drawer}>{drawer}</div>
       )}

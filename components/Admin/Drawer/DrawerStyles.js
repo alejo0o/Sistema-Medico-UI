@@ -4,6 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 225;
 
 export const useStyles = makeStyles((theme) => ({
+  miniDrawer: {
+    width: 60,
+    height: '100vh',
+    background: '#42C3F7',
+    color: 'white',
+  },
   drawer: {
     width: 225,
     height: '100vh',

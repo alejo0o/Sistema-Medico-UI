@@ -14,7 +14,7 @@ export const getServerSideProps = withSession(
   async ({ query: { id_paciente, id_evolucion }, req }) => {
     //Revisa si el usuario esta seteado antes de hacer la petición
     const user = req.session.get('user');
-
+    //Redirecciona si no existe un usuario logeado
     if (!user) {
       return {
         redirect: {
@@ -23,15 +23,24 @@ export const getServerSideProps = withSession(
         },
       };
     }
+    //Redirecciona al usuario que no tiene los permisos adecuados
+    if (user.tipo != 'medico' && user.tipo != 'admin') {
+      return {
+        redirect: {
+          destination: '/admin/pacientes',
+          permanent: false,
+        },
+      };
+    }
 
     const { data: evolucion } = await axios(user.token).get(
-      `${process.env.apiURL}/evoluciones/${id_evolucion}`
+      `/v1/evoluciones/${id_evolucion}`
     );
 
     const { data: paciente } = await axios(user.token).get(
-      `${process.env.apiURL}/pacientes/${id_paciente}`
+      `/v1/pacientes/${id_paciente}`
     );
-    if (!evolucion)
+    if (!evolucion || !paciente)
       return {
         notFound: true,
       };
@@ -97,19 +106,19 @@ const index = ({ evolucion, paciente, user }) => {
   //Maneja la peticion de editar
   const handleSubmit = async (event) => {
     event.preventDefault();
-    nProgress.start();
+    setloading(true);
     try {
       const response = await axios(user.token).put(
         `/v1/evoluciones/${evolucionEdit.evolucion_id}`,
         evolucionEdit
       );
       if (response.status == 200) {
-        nProgress.done();
+        setloading(false);
         setmodalSuccess(true);
       }
     } catch (error_peticion) {
       seterror(error_peticion);
-      nProgress.done();
+      setloading(false);
       setmodalError(true);
     }
   };

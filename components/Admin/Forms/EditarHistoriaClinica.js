@@ -143,7 +143,7 @@ const EditarHistoriaClinica = ({
             </Form.Group>
           )}
           <Form.Group as={Col} sm='4'>
-            <Form.Label>Hábitos:</Form.Label>
+            <Form.Label>Hábitos (opcional):</Form.Label>
             <Form.Control
               name='habitos'
               as='textarea'
