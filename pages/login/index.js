@@ -50,7 +50,6 @@ const index = () => {
         }
       })
       .catch((error_peticion) => {
-        console.log(error_peticion);
         seterror(error_peticion);
         setloading(false);
         seterrorModal(true);
@@ -74,7 +73,3 @@ const index = () => {
 };
 
 export default index;
-/*
-console.log(event.target.username.value);
-    console.log(event.target.password.value);
-*/

@@ -3,7 +3,7 @@ import { withRouter } from 'next/router';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const Paginated = ({ totalPages, router, path }) => {
-  const matches = useMediaQuery('(max-width:728px)');
+  const matches = useMediaQuery('(max-width:768px)');
   return (
     <div className='d-flex'>
       <Pagination

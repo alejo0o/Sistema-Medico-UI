@@ -1,11 +1,13 @@
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@material-ui/core';
 //
 import { Boton } from '@/components/CommonStyles/CommonStyles';
 import Link from 'next/link';
@@ -35,25 +37,25 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PacientesMUI({
-  pacientes,
-  handleModalDelete,
+export default function CustomizedTables({
+  medicos,
   handleShowInfo,
+  handleModalDelete,
   handleChangeQuery,
-  pacientesQuery,
-  handleSearchPacientes,
-  handleSearchPacientesKey,
+  medicosQuery,
+  handleSearchMedicos,
+  handleSearchMedicosKey,
 }) {
   const classes = useStyles();
 
   return (
     <div className='p-3'>
-      <h1>Pacientes</h1>
+      <h1>Médicos</h1>
 
-      <Link href='/admin/paciente'>
+      <Link href='/admin/medico'>
         <a style={{ textDecoration: 'none' }}>
           <Boton size='lg' className='mb-3 mt-1'>
-            Nuevo Paciente <i className='fas fa-user' />
+            Nuevo Médico <i className='fas fa-user-md' />
           </Boton>
         </a>
       </Link>
@@ -66,11 +68,11 @@ export default function PacientesMUI({
             placeholder='Cédula o Nombre'
             name='categoria'
             type='text'
-            value={pacientesQuery}
+            value={medicosQuery}
             onChange={handleChangeQuery}
-            onKeyDown={handleSearchPacientesKey}
+            onKeyDown={handleSearchMedicosKey}
           />
-          <Boton className='' onClick={handleSearchPacientes}>
+          <Boton className='' onClick={handleSearchMedicos}>
             <i className='fas fa-search' style={{ fontSize: '1.5em' }} />
           </Boton>
         </div>
@@ -102,28 +104,28 @@ export default function PacientesMUI({
             </TableRow>
           </TableHead>
           <TableBody>
-            {pacientes.map((paciente) => (
-              <StyledTableRow hover key={paciente.paciente_id}>
+            {medicos.map((medico) => (
+              <StyledTableRow hover key={medico.medico_id}>
                 <StyledTableCell component='td' align='center' scope='row'>
-                  {paciente.cedula}
+                  {medico.cedula}
                 </StyledTableCell>
                 <StyledTableCell component='td' align='center' scope='row'>
-                  {paciente.nombres}
+                  {medico.nombres}
                 </StyledTableCell>
-                <StyledTableCell component='td' align='center'>
-                  {paciente.apellidos}
+                <StyledTableCell component='td' align='center' scope='row'>
+                  {medico.apellidos}
                 </StyledTableCell>
                 <StyledTableCell component='td' align='center'>
                   <Button
                     variant='primary'
                     onClick={() => {
-                      handleShowInfo(paciente);
+                      handleShowInfo(medico);
                     }}>
                     <i className='fas fa-info-circle' />
                   </Button>
                 </StyledTableCell>
                 <StyledTableCell component='td' align='center'>
-                  <Link href={`/admin/epaciente/${paciente.paciente_id}`}>
+                  <Link href={`/admin/medico/${medico.medico_id}`}>
                     <Button variant='primary'>
                       <i className='fas fa-edit' />
                     </Button>
@@ -133,7 +135,7 @@ export default function PacientesMUI({
                   <Button
                     variant='danger'
                     onClick={() => {
-                      handleModalDelete(paciente);
+                      handleModalDelete(medico);
                     }}>
                     <i className='fas fa-trash-alt' />
                   </Button>

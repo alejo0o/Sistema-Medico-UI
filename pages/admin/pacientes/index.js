@@ -88,12 +88,12 @@ const index = ({ data, user }) => {
         `/v1/existehistorial/${paciente_info.paciente_id}`
       );
       data ? sethistoria_clinica(true) : sethistoria_clinica(false);
+      setloading(false);
+      setshowInfo(true);
     } catch (error_peticion) {
       seterror(error_peticion);
       setloading(false);
     }
-    setloading(false);
-    setshowInfo(true);
   };
   //Controla cuando aparece el modal de eliminación
   const handleModalDelete = (paciente) => {
@@ -102,19 +102,19 @@ const index = ({ data, user }) => {
   };
   //Controla la petición de eliminación de un paciente
   const handleDelete = async () => {
-    nProgress.start();
+    setloading(true);
     try {
       const response = await axios(user.token).delete(
         `/v1/pacientes/${paciente.paciente_id}`
       );
       if (response.status == 204) {
-        nProgress.done();
+        setloading(false);
         setdeleteModal(false);
         router.push(router.asPath); //refresca los props de la pagina
       }
     } catch (error_peticion) {
-      nProgress.done();
       seterror(error_peticion);
+      setloading(false);
     }
   };
 
@@ -122,7 +122,7 @@ const index = ({ data, user }) => {
   const handleChangeQuery = (event) => {
     setpacientesQuery(String(event.target.value));
   };
-  //Realiza la petición de buscar los pacientes
+  //Realiza la petición de buscar los pacientes por boton
   const handleSearchPacientes = async () => {
     if (pacientesQuery.trim()) {
       setloading(true);
@@ -142,6 +142,28 @@ const index = ({ data, user }) => {
       setpacientesQueryResultados();
     }
   };
+  //Realiza la petición de buscar los pacientes por enter
+  const handleSearchPacientesKey = async (event) => {
+    if (event.key === 'Enter') {
+      if (pacientesQuery.trim()) {
+        setloading(true);
+        try {
+          const {
+            data: { data: pacientesResultados },
+          } = await axios(user.token).get(
+            `/v1/getpacientesbusqueda/${pacientesQuery.trim()}`
+          );
+          setpacientesQueryResultados(pacientesResultados);
+          setloading(false);
+        } catch (error_peticion) {
+          seterror(error_peticion);
+          setloading(false);
+        }
+      } else {
+        setpacientesQueryResultados();
+      }
+    }
+  };
 
   return (
     <AdminLayout>
@@ -153,6 +175,7 @@ const index = ({ data, user }) => {
         handleChangeQuery={handleChangeQuery}
         pacientesQuery={pacientesQuery}
         handleSearchPacientes={handleSearchPacientes}
+        handleSearchPacientesKey={handleSearchPacientesKey}
       />
       <Pagination totalPages={last_page} path='/admin/pacientes' />
       {/*----------Modal para ver la información del paciente------- */}

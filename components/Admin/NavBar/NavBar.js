@@ -14,11 +14,9 @@ const NavBar = ({ router, handleDrawerToggle }) => {
     axios
       .post('/api/auth/logout')
       .then((response) => {
-        if (response.status == 200) router.push('/');
+        if (response.status == 200) window.location.replace('/');
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   return (

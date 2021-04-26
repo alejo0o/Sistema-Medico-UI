@@ -19,13 +19,21 @@ const EditarEvolucion = ({
   handleRemoveSubcategoria,
   handleSearchCategorias,
   handleSearchSubcategorias,
+  handleSearchCategoriasKey,
+  handleSearchSubcategoriasKey,
 }) => {
   return (
     <div className='p-4'>
       <h3 className='mb-2'>Editar Evolución</h3>
       <h4>{`${paciente.nombres} ${paciente.apellidos}`}</h4>
       <h5 className='mb-3'>{`CI: ${paciente.cedula}`}</h5>
-      <Form onSubmit={handleSubmit}>
+      <Form
+        onSubmit={handleSubmit}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+          }
+        }}>
         <Form.Row>
           <Form.Group as={Col} sm='4'>
             <Form.Label>Fecha:</Form.Label>
@@ -88,6 +96,8 @@ const EditarEvolucion = ({
           handleRemoveSubcategoria={handleRemoveSubcategoria}
           handleSearchCategorias={handleSearchCategorias}
           handleSearchSubcategorias={handleSearchSubcategorias}
+          handleSearchCategoriasKey={handleSearchCategoriasKey}
+          handleSearchSubcategoriasKey={handleSearchSubcategoriasKey}
         />
 
         <Form.Row>

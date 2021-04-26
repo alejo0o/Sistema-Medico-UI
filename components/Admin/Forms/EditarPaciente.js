@@ -23,6 +23,21 @@ const validatecedula = (value) => {
     error = 'Es un campo numerico de 10 digitos';
   return error;
 };
+const validateTelefonoEC = (value) => {
+  let error;
+  if (!value) error = 'Telefono requerido';
+  else if (!/^09[8|9]{1}[0-9]{7}$/i.test(value))
+    error = 'Formato incorrecto (ej: 0991234567)';
+  return error;
+};
+const validateTelefonoOpcional = (value) => {
+  let error;
+  if (value) {
+    if (!/^09[8|9]{1}[0-9]{7}$/i.test(value))
+      error = 'Formato incorrecto (ej: 0991234567)';
+  }
+  return error;
+};
 
 const EditarPaciente = ({
   etnias,
@@ -137,10 +152,12 @@ const EditarPaciente = ({
                   type='text'
                   onChange={handleChange}
                   value={values.telefono}
-                  isInvalid={errors.telefono}
+                  isInvalid={
+                    validateTelefonoEC(values.telefono) || errors.telefono
+                  }
                 />
                 <Form.Control.Feedback type='invalid'>
-                  Campo numérico requerido
+                  {validateTelefonoEC(values.telefono)}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -301,14 +318,24 @@ const EditarPaciente = ({
                   type='text'
                   value={values.contacto_emergencia_telefono}
                   onChange={handleChange}
-                  isInvalid={errors.contacto_emergencia_telefono}
-                  isValid={!errors.contacto_emergencia_telefono}
+                  isInvalid={
+                    validateTelefonoOpcional(
+                      values.contacto_emergencia_telefono
+                    ) || errors.contacto_emergencia_telefono
+                  }
+                  isValid={
+                    !validateTelefonoOpcional(
+                      values.contacto_emergencia_telefono
+                    )
+                  }
                 />
                 <Form.Control.Feedback type='valid'>
                   Campo opcional
                 </Form.Control.Feedback>
                 <Form.Control.Feedback type='invalid'>
-                  Campo numérico
+                  {validateTelefonoOpcional(
+                    values.contacto_emergencia_telefono
+                  )}
                 </Form.Control.Feedback>
               </Form.Group>
             </Form.Row>

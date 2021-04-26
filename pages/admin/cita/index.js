@@ -90,7 +90,6 @@ const index = ({ user }) => {
         setpacientesResults(pacientes);
         setloading(false);
       } catch (error) {
-        console.log(error);
         seterror(error);
         setloading(false);
       }
@@ -109,7 +108,6 @@ const index = ({ user }) => {
         setmedicosResults(medicos);
         setloading(false);
       } catch (error) {
-        console.log(error);
         seterror(error);
         setloading(false);
       }

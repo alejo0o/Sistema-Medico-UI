@@ -31,8 +31,9 @@ const Diagnostico = ({
   handleRemoveSubcategoria,
   handleSearchCategorias,
   handleSearchSubcategorias,
+  handleSearchCategoriasKey,
+  handleSearchSubcategoriasKey,
 }) => {
-  //console.log(enfermedades);
   const matches = useMediaQuery('(max-width:1024px)');
   return (
     <div style={{ background: '' }}>
@@ -46,6 +47,7 @@ const Diagnostico = ({
               placeholder='Categoria'
               value={categoriasQuery}
               onChange={handleChangeCategoria}
+              onKeyDown={handleSearchCategoriasKey}
             />
             <Boton onClick={handleSearchCategorias}>
               <i className='fas fa-search' style={{ fontSize: '1.5em' }} />
@@ -78,6 +80,7 @@ const Diagnostico = ({
               placeholder='Subcategoria'
               value={subcategoriasQuery}
               onChange={handleChangeSubcategoria}
+              onKeyDown={handleSearchSubcategoriasKey}
             />
             <Boton onClick={handleSearchSubcategorias}>
               <i className='fas fa-search' style={{ fontSize: '1.5em' }} />

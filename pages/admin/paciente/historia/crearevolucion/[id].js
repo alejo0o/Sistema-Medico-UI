@@ -79,12 +79,6 @@ const index = ({ paciente, historiaClinica, user }) => {
   const [subCategoriasRestuls, setsubCategoriasRestuls] = useState([]);
   const [enfermedades, setenfermedades] = useState([]);
   /*---------------Queries para las busquedas------ */
-  useEffect(() => {
-    setevolucion({
-      ...evolucion,
-      diagnostico: JSON.stringify(enfermedades),
-    });
-  }, [enfermedades]);
 
   useMemo(() => {
     if (categoriasQuery.trim().length == 0) setcategoriasResults([]);
@@ -103,21 +97,21 @@ const index = ({ paciente, historiaClinica, user }) => {
   //Realiza el submit (post) del formulario
   const handleSubmit = async (event) => {
     event.preventDefault();
-    nProgress.start();
+    setloading(true);
 
     try {
-      const response = await axios(user.token).post(
-        `/v1/evoluciones`,
-        evolucion
-      );
+      const response = await axios(user.token).post(`/v1/evoluciones`, {
+        ...evolucion,
+        diagnostico: JSON.stringify(enfermedades),
+      });
       if (response.status == 201) {
-        nProgress.done();
+        setloading(false);
         setmodalSuccess(true);
       }
     } catch (error_peticion) {
       seterror(error_peticion);
       setmodalError(true);
-      nProgress.done();
+      setloading(false);
     }
   };
   //Revisa si un elemento ya esta en el diagnostico usando LODASH
@@ -142,18 +136,19 @@ const index = ({ paciente, historiaClinica, user }) => {
   };
   //Maneja la selección de enfermedades
   const handleClickSubcategoria = (subcategoria_escogida) => {
-    enfermedades.length == 0
-      ? setenfermedades(enfermedades.concat(subcategoria_escogida))
-      : subcategoriaExiste(subcategoria_escogida)
-      ? ''
-      : setenfermedades(enfermedades.concat(subcategoria_escogida));
+    if (enfermedades.length === 0)
+      setenfermedades(enfermedades.concat(subcategoria_escogida));
+    else {
+      if (!subcategoriaExiste(subcategoria_escogida))
+        setenfermedades(enfermedades.concat(subcategoria_escogida));
+    }
   };
   //Elimina la selección de una enfermedad
   const handleRemoveSubcategoria = (subcategoria_escogida) => {
     //
     setenfermedades(_.without(enfermedades, subcategoria_escogida));
   };
-  //Maneja la busqueda de categorias
+  //Maneja la busqueda de categorias por boton
   const handleSearchCategorias = async () => {
     if (categoriasQuery.trim()) {
       setloading(true);
@@ -173,7 +168,29 @@ const index = ({ paciente, historiaClinica, user }) => {
       setcategoriasResults([]);
     }
   };
-  //Maneja la busqueda de subcategorias
+  //Maneja la busqueda de categorias por enter
+  const handleSearchCategoriasKey = async (event) => {
+    if (event.key === 'Enter') {
+      if (categoriasQuery.trim()) {
+        setloading(true);
+        try {
+          const {
+            data: { data: categorias },
+          } = await axios(user.token).get(
+            `/v1/categoriascodigo/${categoriasQuery}`
+          );
+          setcategoriasResults(categorias);
+          setloading(false);
+        } catch (error_peticion) {
+          seterror(error_peticion);
+          setloading(false);
+        }
+      } else {
+        setcategoriasResults([]);
+      }
+    }
+  };
+  //Maneja la busqueda de subcategorias por boton
   const handleSearchSubcategorias = async () => {
     if (subcategoriasQuery.trim()) {
       setloading(true);
@@ -191,6 +208,28 @@ const index = ({ paciente, historiaClinica, user }) => {
       }
     } else {
       setcategoriasResults([]);
+    }
+  };
+  //Maneja la busqueda de subcategorias por enter
+  const handleSearchSubcategoriasKey = async (event) => {
+    if (event.key === 'Enter') {
+      if (subcategoriasQuery.trim()) {
+        setloading(true);
+        try {
+          const {
+            data: { data: subcategorias },
+          } = await axios(user.token).get(
+            `/v1/subcategoriascodigo/${subcategoriasQuery}`
+          );
+          setsubCategoriasRestuls(subcategorias);
+          setloading(false);
+        } catch (error_peticion) {
+          seterror(error_peticion);
+          setloading(false);
+        }
+      } else {
+        setcategoriasResults([]);
+      }
     }
   };
 
@@ -213,6 +252,8 @@ const index = ({ paciente, historiaClinica, user }) => {
         handleRemoveSubcategoria={handleRemoveSubcategoria}
         handleSearchCategorias={handleSearchCategorias}
         handleSearchSubcategorias={handleSearchSubcategorias}
+        handleSearchCategoriasKey={handleSearchCategoriasKey}
+        handleSearchSubcategoriasKey={handleSearchSubcategoriasKey}
       />
       {/*----------Modal de petición exitosa------- */}
       <ModalSuccess

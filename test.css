@@ -39,12 +39,16 @@
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
-  max-width: ;
-  overflow: ;
+  border: none;
 }
 
 .btn-grad:hover {
   background-position: right center; /* change the direction of the change here */
   color: #fff;
   text-decoration: none;
+  background: linear-gradient(to right, #2188f0 0%, #025d79 51%, #2188f0 100%);
+  text-align: justify;
+
+  background-color: #45c8ff;
+  background-image: linear-gradient(315deg, #045de9 0%, #09c6f9 74%);
 }

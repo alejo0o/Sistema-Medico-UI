@@ -4,6 +4,7 @@ export const LoaderContainer = styled.div`
   .lds-roller {
     display: inline-block;
     position: relative;
+
     width: 80px;
     height: 80px;
   }
@@ -18,7 +19,7 @@ export const LoaderContainer = styled.div`
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: black;
+    background: white;
     margin: -4px 0 0 -4px;
   }
   .lds-roller div:nth-child(1) {

@@ -80,12 +80,6 @@ const index = ({ evolucion, paciente, user }) => {
   //--------------Funciones de la página-----------//
   //Cambia cada vez que se detecta un cambio en el arreglo de enfermedades
 
-  useEffect(() => {
-    setevolucionEdit({
-      ...evolucionEdit,
-      diagnostico: JSON.stringify(enfermedades),
-    });
-  }, [enfermedades]);
   //Se ejecuta 1 vez para setear los valores de la evolucion y su diagnostico
   useEffect(() => {
     setevolucionEdit(evolucion);
@@ -110,7 +104,10 @@ const index = ({ evolucion, paciente, user }) => {
     try {
       const response = await axios(user.token).put(
         `/v1/evoluciones/${evolucionEdit.evolucion_id}`,
-        evolucionEdit
+        {
+          ...evolucionEdit,
+          diagnostico: JSON.stringify(enfermedades),
+        }
       );
       if (response.status == 200) {
         setloading(false);
@@ -156,7 +153,7 @@ const index = ({ evolucion, paciente, user }) => {
     //
     setenfermedades(_.without(enfermedades, subcategoria_escogida));
   };
-  //Maneja la busqueda de categorias
+  //Maneja la busqueda de categorias por boton
   const handleSearchCategorias = async () => {
     if (categoriasQuery.trim()) {
       setloading(true);
@@ -176,7 +173,29 @@ const index = ({ evolucion, paciente, user }) => {
       setcategoriasResults([]);
     }
   };
-  //Maneja la busqueda de subcategorias
+  //Maneja la busqueda de categorias por enter
+  const handleSearchCategoriasKey = async (event) => {
+    if (event.key === 'Enter') {
+      if (categoriasQuery.trim()) {
+        setloading(true);
+        try {
+          const {
+            data: { data: categorias },
+          } = await axios(user.token).get(
+            `/v1/categoriascodigo/${categoriasQuery}`
+          );
+          setcategoriasResults(categorias);
+          setloading(false);
+        } catch (error_peticion) {
+          seterror(error_peticion);
+          setloading(false);
+        }
+      } else {
+        setcategoriasResults([]);
+      }
+    }
+  };
+  //Maneja la busqueda de subcategorias por boton
   const handleSearchSubcategorias = async () => {
     if (subcategoriasQuery.trim()) {
       setloading(true);
@@ -194,6 +213,28 @@ const index = ({ evolucion, paciente, user }) => {
       }
     } else {
       setcategoriasResults([]);
+    }
+  };
+  //Maneja la busqueda de subcategorias por enter
+  const handleSearchSubcategoriasKey = async (event) => {
+    if (event.key === 'Enter') {
+      if (subcategoriasQuery.trim()) {
+        setloading(true);
+        try {
+          const {
+            data: { data: subcategorias },
+          } = await axios(user.token).get(
+            `/v1/subcategoriascodigo/${subcategoriasQuery}`
+          );
+          setsubCategoriasRestuls(subcategorias);
+          setloading(false);
+        } catch (error_peticion) {
+          seterror(error_peticion);
+          setloading(false);
+        }
+      } else {
+        setcategoriasResults([]);
+      }
     }
   };
 
@@ -217,6 +258,8 @@ const index = ({ evolucion, paciente, user }) => {
         handleRemoveSubcategoria={handleRemoveSubcategoria}
         handleSearchCategorias={handleSearchCategorias}
         handleSearchSubcategorias={handleSearchSubcategorias}
+        handleSearchCategoriasKey={handleSearchCategoriasKey}
+        handleSearchSubcategoriasKey={handleSearchSubcategoriasKey}
       />
 
       {/*----------Modal de petición exitosa------- */}

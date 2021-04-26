@@ -17,6 +17,8 @@ export const Boton = styled(Button)`
         return 'linear-gradient(to right, #bdc3c7 0%, #2c3e50  51%, #bdc3c7  100%)';
       case 'blue-variant':
         return 'linear-gradient(to right, #000046 0%, #1CB5E0  51%, #000046  100%)';
+      case 'blue-login':
+        return 'linear-gradient(to right, #045de9 0%, #09c6f9  51%, #045de9  100%)';
       default:
         return 'linear-gradient(to right, #36D1DC 0%, #5B86E5  51%, #36D1DC  100%)';
     }
@@ -37,6 +39,7 @@ export const Boton = styled(Button)`
     text-decoration: none;
   }
 `;
+
 export const Boton_A = styled(Button)`
   background: #00a5e9;
   color: white;
@@ -45,4 +48,12 @@ export const Boton_A = styled(Button)`
     background: #42c3f7;
     color: white;
   }
+`;
+export const CustomHR = styled.hr`
+  border: 0;
+  height: 2px;
+  background-image: -webkit-linear-gradient(left, #0e86d4, #31bcd8, #0e86d4);
+  background-image: -moz-linear-gradient(left, #0e86d4, #31bcd8, #0e86d4);
+  background-image: -ms-linear-gradient(left, #0e86d4, #31bcd8, #0e86d4);
+  background-image: -o-linear-gradient(left, #0e86d4, #31bcd8, #0e86d4);
 `;

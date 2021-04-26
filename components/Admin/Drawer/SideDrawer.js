@@ -45,6 +45,14 @@ function ResponsiveDrawer(props) {
             <ListItemText primary={'Citas'} />
           </ListItem>
         </Link>
+        <Link href='/admin/medicos'>
+          <ListItem button className={classes.styledLink}>
+            <ListItemIcon>
+              <i className='fas fa-user-md' />
+            </ListItemIcon>
+            <ListItemText primary={'Médicos'} />
+          </ListItem>
+        </Link>
       </List>
     </div>
   );
@@ -74,6 +82,17 @@ function ResponsiveDrawer(props) {
           style={{ marginTop: '1em' }}>
           <ListItemIcon>
             <i className='far fa-calendar-alt' style={{ fontSize: '2em' }} />
+          </ListItemIcon>
+        </ListItem>
+      </Link>
+      <Divider />
+      <Link href='/admin/medicos'>
+        <ListItem
+          button
+          className={classes.styledLink}
+          style={{ marginTop: '1em' }}>
+          <ListItemIcon>
+            <i className='fas fa-user-md' style={{ fontSize: '2em' }} />
           </ListItemIcon>
         </ListItem>
       </Link>

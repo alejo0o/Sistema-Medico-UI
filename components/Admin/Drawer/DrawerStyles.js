@@ -6,13 +6,13 @@ const drawerWidth = 225;
 export const useStyles = makeStyles((theme) => ({
   miniDrawer: {
     width: 60,
-    height: '100vh',
+    height: '100%',
     background: '#42C3F7',
     color: 'white',
   },
   drawer: {
     width: 225,
-    height: '100vh',
+    height: '100%',
     background: '#42C3F7',
     color: 'white',
   },

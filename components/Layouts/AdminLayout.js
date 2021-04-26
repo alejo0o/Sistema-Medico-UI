@@ -10,13 +10,13 @@ const AdminLayout = ({ children, miniDrawer }) => {
   };
 
   return (
-    <div className='d-flex'>
+    <div className='d-flex' style={{ maxHeight: 'auto', minHeight: '100vh' }}>
       <Drawer
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
         miniDrawer={miniDrawer}
       />
-      <div className='w-100'>
+      <div className='w-100 pb-3'>
         <NavBar handleDrawerToggle={handleDrawerToggle} />
         {children}
       </div>
