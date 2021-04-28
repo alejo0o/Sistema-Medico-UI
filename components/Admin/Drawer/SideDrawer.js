@@ -11,6 +11,7 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 import { useStyles } from './DrawerStyles';
+import { Dropdown } from 'react-bootstrap';
 
 function ResponsiveDrawer(props) {
   const { window } = props;
@@ -53,6 +54,30 @@ function ResponsiveDrawer(props) {
             <ListItemText primary={'Médicos'} />
           </ListItem>
         </Link>
+        <Link href='/admin/tratamientos'>
+          <ListItem button className={classes.styledLink}>
+            <ListItemIcon>
+              <i className='fas fa-pills' />
+            </ListItemIcon>
+            <ListItemText primary={'Tratamientos'} />
+          </ListItem>
+        </Link>
+        <Link href='/admin/materiales'>
+          <ListItem button className={classes.styledLink}>
+            <ListItemIcon>
+              <i className='fas fa-dolly-flatbed' />
+            </ListItemIcon>
+            <ListItemText primary={'Inventario'} />
+          </ListItem>
+        </Link>
+        <Link href='/admin/consentimiento'>
+          <ListItem button className={classes.styledLink}>
+            <ListItemIcon>
+              <i className='fas fa-file-alt' />
+            </ListItemIcon>
+            <ListItemText primary={`Consentimiento informado`} />
+          </ListItem>
+        </Link>
       </List>
     </div>
   );
@@ -93,6 +118,28 @@ function ResponsiveDrawer(props) {
           style={{ marginTop: '1em' }}>
           <ListItemIcon>
             <i className='fas fa-user-md' style={{ fontSize: '2em' }} />
+          </ListItemIcon>
+        </ListItem>
+      </Link>
+      <Divider />
+      <Link href='/admin/tratamientos'>
+        <ListItem
+          button
+          className={classes.styledLink}
+          style={{ marginTop: '1em' }}>
+          <ListItemIcon>
+            <i className='fas fa-pills' />
+          </ListItemIcon>
+        </ListItem>
+      </Link>
+      <Divider />
+      <Link href='/admin/materiales'>
+        <ListItem
+          button
+          className={classes.styledLink}
+          style={{ marginTop: '1em' }}>
+          <ListItemIcon>
+            <i className='fas fa-dolly-flatbed' />
           </ListItemIcon>
         </ListItem>
       </Link>
