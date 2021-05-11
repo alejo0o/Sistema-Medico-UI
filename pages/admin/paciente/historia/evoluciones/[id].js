@@ -36,7 +36,7 @@ export const getServerSideProps = withSession(
 
     //Retorna las evoluciones del paciente con el id indicado
     const { data } = await axios(user.token).get(
-      `/v1/evolucionespaciente/${id}`
+      `/v1/evolucionespaciente/${id}?page=${page}`
     );
     //Retorna el paciente con el id indicado
     const { data: paciente } = await axios(user.token).get(
@@ -66,7 +66,8 @@ const index = ({ data, paciente, user }) => {
     fecha_ultima_menstruacion: '',
     procedimiento: '',
     diagnostico: '',
-    tratamiento: '',
+    medicacion: '',
+    indicaciones: '',
     proximo_control: '',
   });
   const [showInfo, setshowInfo] = useState(false); //variable para el modal de info evolucion

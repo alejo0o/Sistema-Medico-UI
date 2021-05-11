@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { allDays } from '@/components/utils/calendarData';
-import { format, parseJSON } from 'date-fns';
+import { format } from 'date-fns';
+import { Form } from 'react-bootstrap';
 //componentes
 import AdminLayout from '@/components/Layouts/AdminLayout';
 import withSession from '@/components/utils/session';
@@ -8,10 +9,11 @@ import axios from '@/components/utils/axios-helper';
 import Calendario from '@/components/Admin/CalendarioVariante/Calendario';
 import VerCita from '@/components/Admin/Modales/VerCita';
 import ModalEliminar from '@/components/Admin/Modales/ModalEliminar';
-import swrHook from '@/components/utils/useSWR-helper';
+import { swrRevalidateHook } from '@/components/utils/utils';
 import NotificacionEnviada from '@/components/Admin/Modales/NotificacionEnviada';
 import ModalError from '@/components/Admin/Modales/ModalError';
 import { guardar_numero, get_fecha } from '@/components/utils/utils';
+import { LinearProgress } from '@material-ui/core';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   //Revisa si el usuario esta seteado antes de hacer la petición
@@ -25,15 +27,17 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
       },
     };
   }
+  const { data: medicos } = await axios(user.token).get(`/v1/medicosall`);
 
   return {
     props: {
       user,
+      medicos,
     },
   };
 });
 
-const index = ({ user }) => {
+const index = ({ user, medicos }) => {
   /*---------------Variables de estado---------- */
   //Variables para el calendario
   const [selectedDate, setselectedDate] = useState(new Date());
@@ -63,11 +67,21 @@ const index = ({ user }) => {
   const [modalSuccess, setmodalSuccess] = useState(false);
   const [modalSuccessSMS, setmodalSuccessSMS] = useState(false);
   const [modalError, setmodalError] = useState(false);
+  //En caso de no ser doctor las citas pueden buscarse por doctor
+  const [medicoSelect, setmedicoSelect] = useState(
+    medicos[0] ? medicos[0].cedula : "' '"
+  );
   //-------------Props de la pagina--------------------//
   /*---------------Funciones del componente------- */
 
-  const { data: citas, isLoading, isError } = swrHook(
-    `/v1/citasxfecha/${format(selectedDate, 'PP')}`,
+  const {
+    data: citas,
+    isLoading,
+    isError,
+  } = swrRevalidateHook(
+    `/v1/citasxfecha/${format(selectedDate, 'PP')}/${
+      user.tipo === 'user' ? medicoSelect : user.cedula
+    }`,
     user.token
   );
 
@@ -82,16 +96,18 @@ const index = ({ user }) => {
   };
 
   const handleDeleteCita = async () => {
+    setloading(true);
     try {
       const response = await axios(user.token).delete(
         `/v1/citas/${citaInfo.cita_id}`
       );
       if (response.status === 204) {
+        setloading(false);
         setmodalEliminarCita(false);
-        setselectedDate(new Date());
       }
     } catch (error) {
       seterror(error);
+      setloading(false);
     }
   };
 
@@ -224,6 +240,28 @@ const index = ({ user }) => {
 
   return (
     <AdminLayout>
+      {loading && <LinearProgress />}
+      {user.tipo === 'user' && (
+        <div className='pt-4 pr-4 pl-4 w-25'>
+          <Form.Group controlId='medico-select'>
+            <h3>Médicos</h3>
+            <Form.Control
+              as='select'
+              custom
+              onChange={(event) => {
+                setmedicoSelect(event.target.value);
+              }}>
+              {medicos.map((medico) => (
+                <option
+                  key={medico.cedula}
+                  value={medico.cedula}>{`Dr./Dra. ${medico.nombres
+                  .toString()
+                  .trim()} ${medico.apellidos.toString().trim()}`}</option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        </div>
+      )}
       <Calendario
         data={data}
         selectedDate={selectedDate}

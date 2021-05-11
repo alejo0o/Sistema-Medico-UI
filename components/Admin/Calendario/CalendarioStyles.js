@@ -51,7 +51,7 @@ export const WeekHeader = styled.div`
 
 export const Columns = styled.div`
   display: grid;
-  grid-template-columns: repeat(7, minmax(135px, 350px));
+  grid-template-columns: repeat(7, minmax(135px, 450px));
   @media screen and (max-width: 1264px) {
     grid-template-columns: repeat(4, minmax(auto, auto));
   }
@@ -73,6 +73,7 @@ export const DayContainer = styled.div`
   border: solid 1px #003a6b;
   scrollbar-width: thin;
   overflow: auto;
+  cursor: pointer;
 
   ::-webkit-scrollbar {
     width: 8px;
@@ -103,6 +104,7 @@ export const Nota = styled.div`
   font-weight: normal;
   font-size: 0.9em;
   transition: 0.5s;
+
   &:hover {
     color: white;
     background-color: #045de9;
@@ -111,8 +113,9 @@ export const Nota = styled.div`
 `;
 
 export const NotaCircle = styled.div`
-  height: 18px;
-  width: 18px;
+  height: 10px;
+  width: 10px;
   border-radius: 50%;
   display: inline-block;
+  background: #055c9d;
 `;

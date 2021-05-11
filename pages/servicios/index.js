@@ -12,18 +12,6 @@ import TextoImagen from '@/components/Servicios/TextoImagen';
 import { CustomHR } from '@/components/CommonStyles/CommonStyles';
 import useUser from '@/components/utils/useUser';
 
-export const getStaticProps = async (ctx) => {
-  const { data: consultorio } = await axios.get(
-    `${process.env.NEXT_PUBLIC_APIURL}/v1/consultorios/1`
-  );
-
-  return {
-    props: {
-      consultorio,
-    },
-  };
-};
-
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const index = ({ consultorio }) => {
+const index = () => {
   const { user } = useUser();
   const classes = useStyles();
   const matches = useMediaQuery('(max-width:768px)');
@@ -48,7 +36,7 @@ const index = ({ consultorio }) => {
   if (!user) return <></>;
 
   return (
-    <Layout consultorio={consultorio} user={user}>
+    <Layout user={user}>
       {servicios &&
         servicios.data.map((servicio, i) =>
           i % 2 === 0 ? (

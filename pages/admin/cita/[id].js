@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { LinearProgress } from '@material-ui/core';
 //
 import withSession from '@/components/utils/session';
 import axios from '@/components/utils/axios-helper';
@@ -6,7 +7,7 @@ import EditarCita from '@/components/Admin/Forms/EditarCita';
 import AdminLayout from '@/components/Layouts/AdminLayout';
 import ModalSuccess from '@/components/Admin/Modales/ModalSuccess';
 import ModalError from '@/components/Admin/Modales/ModalError';
-import { LinearProgress } from '@material-ui/core';
+import ErrorCreacion from '@/components/Admin/Modales/ModalError';
 
 export const getServerSideProps = withSession(async ({ query, req, res }) => {
   //Revisa si el usuario esta seteado antes de hacer la petición
@@ -22,15 +23,18 @@ export const getServerSideProps = withSession(async ({ query, req, res }) => {
   }
   const { data: cita } = await axios(user.token).get(`/v1/citas/${query.id}`);
 
+  const { data: medicos } = await axios(user.token).get(`/v1/medicosall`);
+
   return {
     props: {
       user,
       cita,
+      medicos,
     },
   };
 });
 
-const index = ({ cita, user }) => {
+const index = ({ cita, user, medicos }) => {
   /*---------------Variables de estado---------- */
   const [modalSuccess, setmodalSuccess] = useState(false);
   const [modalError, setmodalError] = useState(false);
@@ -40,11 +44,12 @@ const index = ({ cita, user }) => {
   const [medicosResults, setmedicosResults] = useState([]);
   const [loading, setloading] = useState(false);
   const [error, seterror] = useState(null);
+  const [errorHora, seterrorHora] = useState(false); //en caso de que la cita sea a la misma hora
   const [citaEdit, setcitaEdit] = useState({
     paciente_id: '',
-    medico_id: '',
+    medico_id: medicos[0] ? medicos[0].medico_id : '',
     fecha: '',
-    hora: '',
+    hora: '07:00:00',
     motivo_cita: '',
     extra_info: '',
     paciente_nombres: '',
@@ -68,7 +73,7 @@ const index = ({ cita, user }) => {
     setloading(true);
     try {
       const response = await axios(user.token).put(
-        `/v1/citas/${citaEdit.cita_id}`,
+        `/v1/editarcita/${citaEdit.cita_id}`,
         citaEdit
       );
       if (response.status === 200) {
@@ -76,7 +81,7 @@ const index = ({ cita, user }) => {
         setmodalSuccess(true);
       }
     } catch (error) {
-      setmodalError(true);
+      error.response.data.citaexiste ? seterrorHora(true) : setmodalError(true);
       seterror(error);
       setloading(false);
     }
@@ -107,22 +112,26 @@ const index = ({ cita, user }) => {
       setpacientesResults([]);
     }
   };
-
-  const handleSearchMedicos = async () => {
-    if (medicosQuery.trim()) {
-      setloading(true);
-      try {
-        const {
-          data: { data: medicos },
-        } = await axios(user.token).get(`/v1/medicosbusqueda/${medicosQuery}`);
-        setmedicosResults(medicos);
-        setloading(false);
-      } catch (error) {
-        seterror(error);
-        setloading(false);
+  //Busca el paciente por Enter
+  const handleSearchPacienteKey = async (event) => {
+    if (event.key === 'Enter') {
+      if (pacientesQuery.trim()) {
+        setloading(true);
+        try {
+          const {
+            data: { data: pacientes },
+          } = await axios(user.token).get(
+            `/v1/getpacientesbusqueda/${pacientesQuery}`
+          );
+          setpacientesResults(pacientes);
+          setloading(false);
+        } catch (error) {
+          seterror(error);
+          setloading(false);
+        }
+      } else {
+        setpacientesResults([]);
       }
-    } else {
-      setmedicosResults([]);
     }
   };
 
@@ -130,12 +139,6 @@ const index = ({ cita, user }) => {
     setcitaEdit({
       ...citaEdit,
       paciente_id: paciente_select.paciente_id,
-    });
-  };
-  const handleClickMedico = (medico_select) => {
-    setcitaEdit({
-      ...citaEdit,
-      medico_id: medico_select.medico_id,
     });
   };
 
@@ -147,19 +150,14 @@ const index = ({ cita, user }) => {
         handleChangePacientesQuery={(event) => {
           setpacientesQuery(String(event.target.value));
         }}
-        handleChangeMedicosQuery={(event) => {
-          setmedicosQuery(String(event.target.value));
-        }}
         pacientesResults={pacientesResults}
         handleSubmit={handleSubmit}
         handleSearchPaciente={handleSearchPaciente}
         pacientesQuery={pacientesQuery}
-        medicosQuery={medicosQuery}
-        medicosResults={medicosResults}
-        handleSearchMedicos={handleSearchMedicos}
         handleClickPaciente={handleClickPaciente}
-        handleClickMedico={handleClickMedico}
         handleChange={handleChange}
+        medicos={medicos}
+        handleSearchPacienteKey={handleSearchPacienteKey}
       />
       {/*---------Modal de exito en la edición--- */}
       <ModalSuccess
@@ -179,6 +177,15 @@ const index = ({ cita, user }) => {
         }}
         tituloMensaje='Error!'
         mensaje='Revise los datos ingresados o contacte con el administrador.'
+      />
+      {/*----------Modal de error en la creación de citas en la misma hora ------ */}
+      <ErrorCreacion
+        show={errorHora}
+        handleClose={() => {
+          seterrorHora(false);
+        }}
+        tituloMensaje='Cita Cruzada!'
+        mensaje='Ya existe otra cita, con el medico seleccionado, a la misma fecha y hora. Intenta con un horario diferente.'
       />
     </AdminLayout>
   );

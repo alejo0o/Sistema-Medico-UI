@@ -2,6 +2,7 @@ import { Form, Col, ListGroup, Row } from 'react-bootstrap';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Boton, Boton_A } from '@/components/CommonStyles/CommonStyles';
+import { objeto_horas } from '@/components/utils/utils';
 
 const StyledListItem = styled(ListGroup.Item)`
   cursor: pointer;
@@ -15,17 +16,17 @@ const NuevaCita = ({
   handleChange,
   handleSearchPaciente,
   pacientesQuery,
-  medicosQuery,
+
   handleChangePacientesQuery,
-  handleChangeMedicosQuery,
+
   pacientesResults,
-  medicosResults,
-  handleSearchMedicos,
+
   handleClickPaciente,
-  handleClickMedico,
+  medicos,
+  handleSearchPacienteKey,
 }) => {
   const [pacienteSelect, setpacienteSelect] = useState('');
-  const [medicoSelect, setmedicoSelect] = useState('');
+
   return (
     <div className='p-4'>
       <h1>Nueva Cita</h1>
@@ -41,6 +42,7 @@ const NuevaCita = ({
               placeholder='cédula o nombres'
               value={pacientesQuery}
               onChange={handleChangePacientesQuery}
+              onKeyDown={handleSearchPacienteKey}
             />
             <Boton onClick={handleSearchPaciente}>
               <i className='fas fa-search' style={{ fontSize: '1.5em' }} />
@@ -69,65 +71,18 @@ const NuevaCita = ({
           </ListGroup>
         </Col>
         <Col sm='6'>
-          <Form.Label>Buscar Medico:</Form.Label>
-          <div className='d-flex'>
-            <Form.Control
-              name='buscar_medico'
-              type='text'
-              placeholder='cédula o nombres'
-              value={medicosQuery}
-              onChange={handleChangeMedicosQuery}
-            />
-            <Boton onClick={handleSearchMedicos}>
-              <i className='fas fa-search' style={{ fontSize: '1.5em' }} />
-            </Boton>
-          </div>
-
-          <ListGroup variant='flush'>
-            {medicosResults.length > 0 ? (
-              medicosResults.map((medico) => (
-                <StyledListItem
-                  key={medico.medico_id}
-                  onClick={() => {
-                    handleClickMedico(medico);
-                    setmedicoSelect(
-                      `${medico.nombres
-                        .toString()
-                        .trim()} ${medico.apellidos.toString().trim()}`
-                    );
-                  }}>
-                  {`${medico.nombres} ${medico.apellidos}`}
-                </StyledListItem>
-              ))
-            ) : (
-              <ListGroup.Item>No hay resultados</ListGroup.Item>
-            )}
-          </ListGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col sm='6'>
           <Form.Label>Paciente:</Form.Label>
 
           <Form.Control
             name='buscar_paciente'
             type='text'
-            placeholder='cédula o nombres'
+            placeholder=''
             disabled
             value={pacienteSelect}
           />
         </Col>
-        <Col sm='6'>
-          <Form.Label>Medico:</Form.Label>
-          <Form.Control
-            name='buscar_medico'
-            type='text'
-            disabled
-            placeholder='cédula o nombres'
-            value={medicoSelect}
-          />
-        </Col>
       </Row>
+
       {/*------Formulario para la crecion de la cita---- */}
 
       <Form onChange={handleChange} onSubmit={handleSubmit}>
@@ -136,12 +91,32 @@ const NuevaCita = ({
             <Form.Label>Fecha:</Form.Label>
             <Form.Control name='fecha' type='date' required />
           </Form.Group>
-          <Form.Group as={Col} sm='6'>
-            <Form.Label>Hora:</Form.Label>
-            <Form.Control name='hora' type='time' required />
+          <Form.Group as={Col} sm='6' controlId='medico-select'>
+            <Form.Label>Médico:</Form.Label>
+            <Form.Control as='select' name='medico_id' custom>
+              {medicos.map((medico) => (
+                <option
+                  key={medico.medico_id}
+                  value={
+                    medico.medico_id
+                  }>{`Dr./Dra. ${medico.nombres
+                  .toString()
+                  .trim()} ${medico.apellidos.toString().trim()}`}</option>
+              ))}
+            </Form.Control>
           </Form.Group>
         </Row>
         <Row>
+          <Form.Group as={Col} sm='6' controlId='hora'>
+            <Form.Label>Hora:</Form.Label>
+            <Form.Control as='select' name='hora' custom>
+              {Object.keys(objeto_horas).map((llave, i) => (
+                <option key={i} value={llave}>
+                  {objeto_horas[llave]}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
           <Form.Group as={Col} sm='6'>
             <Form.Label>Motivo de la Cita (opcional):</Form.Label>
             <Form.Control name='motivo_cita' as='textarea' />

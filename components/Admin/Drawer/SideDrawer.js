@@ -12,21 +12,20 @@ import {
 } from '@material-ui/core';
 import { useStyles } from './DrawerStyles';
 import { Dropdown } from 'react-bootstrap';
+import useUser from '@/components/utils/useUser';
 
 function ResponsiveDrawer(props) {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
+  const { user } = useUser({ redirectTo: '/' });
+
   const matches = useMediaQuery('(max-width:991px)');
 
   const drawer = (
     <div>
       <div className={classes.drawerImage}>
-        <img
-          className='w-100 h-100'
-          alt=''
-          src='https://www.pngitem.com/pimgs/m/226-2261747_company-name-icon-png-transparent-png.png'
-        />
+        <img className='w-100 h-100' alt='' src={props.logo} />
       </div>
       <Divider />
       <List>
@@ -38,14 +37,29 @@ function ResponsiveDrawer(props) {
             <ListItemText primary={'Pacientes'} />
           </ListItem>
         </Link>
-        <Link href='/admin/citas'>
-          <ListItem button className={classes.styledLink}>
-            <ListItemIcon>
+
+        <Dropdown>
+          <Dropdown.Toggle
+            id='dropdown-basic'
+            className='w-100'
+            as={ListItem}
+            button
+            className={classes.styledLink}>
+            <ListItemIcon id='list-item-id'>
               <i className='far fa-calendar-alt' />
             </ListItemIcon>
             <ListItemText primary={'Citas'} />
-          </ListItem>
-        </Link>
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu className='w-100'>
+            <Link href='/admin/citas'>
+              <a className='dropdown-item'>Calendario</a>
+            </Link>
+            <Link href='/admin/citas2'>
+              <a className='dropdown-item'>Calenadario Variante</a>
+            </Link>
+          </Dropdown.Menu>
+        </Dropdown>
         <Link href='/admin/medicos'>
           <ListItem button className={classes.styledLink}>
             <ListItemIcon>
@@ -70,14 +84,50 @@ function ResponsiveDrawer(props) {
             <ListItemText primary={'Inventario'} />
           </ListItem>
         </Link>
-        <Link href='/admin/consentimiento'>
-          <ListItem button className={classes.styledLink}>
-            <ListItemIcon>
+
+        {user ? (
+          user.tipo === 'admin' ? (
+            <Link href='/admin/usuarios'>
+              <ListItem button className={classes.styledLink}>
+                <ListItemIcon>
+                  <i className='fas fa-users-cog' />
+                </ListItemIcon>
+                <ListItemText primary={'Usuarios'} />
+              </ListItem>
+            </Link>
+          ) : (
+            <></>
+          )
+        ) : (
+          <></>
+        )}
+
+        <Dropdown>
+          <Dropdown.Toggle
+            id='dropdown-basic'
+            className='w-100'
+            as={ListItem}
+            button
+            className={classes.styledLink}>
+            <ListItemIcon id='list-item-id'>
               <i className='fas fa-file-alt' />
             </ListItemIcon>
-            <ListItemText primary={`Consentimiento informado`} />
-          </ListItem>
-        </Link>
+            Consentimiento <br />
+            Informado
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu className='w-100'>
+            <Link href='/admin/consentimiento/declaracion'>
+              <a className='dropdown-item'>Declaración</a>
+            </Link>
+            <Link href='/admin/consentimiento/negativa'>
+              <a className='dropdown-item'>Negativa</a>
+            </Link>
+            <Link href='/admin/consentimiento/revocatoria'>
+              <a className='dropdown-item'>Revocatoria</a>
+            </Link>
+          </Dropdown.Menu>
+        </Dropdown>
       </List>
     </div>
   );

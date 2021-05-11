@@ -24,7 +24,7 @@ import {
 } from './LoginStyles';
 import { Boton } from '@/components/CommonStyles/CommonStyles';
 
-const LogIn = ({ handleSubmit, loading }) => {
+const LogIn = ({ handleSubmit, loading, consultorio }) => {
   const classes = styles();
   const matches = useMediaQuery('(max-width:768px)');
   const [showPassword, setshowPassword] = useState(false);
@@ -34,7 +34,7 @@ const LogIn = ({ handleSubmit, loading }) => {
   return (
     <LoginContainer>
       <IlustrativeBox>
-        {matches ? <h3>Company Name</h3> : <h2>Company Name</h2>}
+        {matches ? <h3>{consultorio}</h3> : <h2>{consultorio}</h2>}
         <ImageContainer>
           <img className='w-100' src='/login_image.png' />
         </ImageContainer>

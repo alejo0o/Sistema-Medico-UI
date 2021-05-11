@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-const NavBar = ({ router, handleDrawerToggle }) => {
+const NavBar = ({ router, handleDrawerToggle, consultorio_nombre }) => {
   const matches = useMediaQuery('(max-width:991px)');
 
   const handleLogout = () => {
@@ -35,7 +35,7 @@ const NavBar = ({ router, handleDrawerToggle }) => {
         )}
         <Link href='/'>
           <a className='navbar-brand ml-2'>
-            <strong> Company Name</strong>
+            <strong>{consultorio_nombre}</strong>
           </a>
         </Link>
       </Nav.Item>

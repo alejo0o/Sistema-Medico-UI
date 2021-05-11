@@ -18,14 +18,20 @@ export const getServerSideProps = withSession(async ({ req }) => {
       },
     };
   }
+
+  const { data: consultorio } = await axios.get(
+    `${process.env.NEXT_PUBLIC_APIURL}/v1/consultorios/1`
+  );
+
   return {
     props: {
       data: null,
+      consultorio,
     },
   };
 });
 
-const index = () => {
+const index = ({ consultorio }) => {
   /*-------------Variables de estado de la pagina-------------*/
   const [error, seterror] = useState(null);
   const [loading, setloading] = useState(false);
@@ -58,7 +64,11 @@ const index = () => {
 
   return (
     <MainContainer>
-      <Login handleSubmit={handleSubmit} loading={loading} />
+      <Login
+        handleSubmit={handleSubmit}
+        loading={loading}
+        consultorio={consultorio.nombre}
+      />
       {/*Modal de error ante credenciales invalidas */}
       <ModalError
         show={errorModal}

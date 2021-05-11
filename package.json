@@ -29,6 +29,7 @@
     "bootstrap": "4.6.0",
     "date-fns": "2.21.0",
     "formik": "2.2.6",
+    "generate-password": "1.6.0",
     "lodash": "4.17.21",
     "next": "10.0.9",
     "next-iron-session": "4.1.12",
@@ -38,6 +39,7 @@
     "react-bootstrap": "1.5.2",
     "react-device-detect": "1.17.0",
     "react-dom": "17.0.1",
+    "react-to-print": "2.12.4",
     "swr": "0.5.4",
     "yup": "0.32.9"
   },

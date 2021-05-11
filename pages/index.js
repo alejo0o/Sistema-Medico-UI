@@ -25,7 +25,7 @@ const index = ({ consultorio }) => {
   if (!user) return <></>;
 
   return (
-    <Layout consultorio={consultorio} user={user}>
+    <Layout user={user}>
       <div
         className={`${
           matches ? 'd-block' : 'd-flex'

@@ -1,4 +1,5 @@
 import { Modal, Col, Row, ListGroup } from 'react-bootstrap';
+import Link from 'next/link';
 import { Boton } from '@/components/CommonStyles/CommonStyles';
 import { StyledCol } from '@/components/CommonStyles/CommonStyles';
 import Cell from '@/components/CommonStyles/TableCell';
@@ -8,6 +9,7 @@ const InfoEvolucion = ({ show, handleClose, paciente, evolucion }) => {
   const enfermedades = evolucion.diagnostico
     ? JSON.parse(evolucion.diagnostico)
     : [];
+
   /*{Object.keys(enfermedades).map((key) => (
                   <ListGroup.Item variant='info' key={key}>
                     {`${key}: ${enfermedades[key]}`}
@@ -53,8 +55,16 @@ const InfoEvolucion = ({ show, handleClose, paciente, evolucion }) => {
               </ListGroup>
             </StyledCol>
             <StyledCol sm='4'>
-              <TextCell labelName='Tratamiento' info={evolucion.tratamiento} />
+              <TextCell labelName='Medicación' info={evolucion.medicacion} />
             </StyledCol>
+            <StyledCol sm='4'>
+              <TextCell
+                labelName='Indicaciones'
+                info={evolucion.indicaciones}
+              />
+            </StyledCol>
+          </Row>
+          <Row>
             {paciente.genero_id != 1 ? (
               <StyledCol sm='4'>
                 <Cell
@@ -70,8 +80,6 @@ const InfoEvolucion = ({ show, handleClose, paciente, evolucion }) => {
                 />
               </StyledCol>
             )}
-          </Row>
-          <Row>
             {paciente.genero_id != 1 ? (
               <StyledCol sm='4'>
                 <Cell
@@ -87,6 +95,14 @@ const InfoEvolucion = ({ show, handleClose, paciente, evolucion }) => {
       </Modal.Body>
 
       <Modal.Footer>
+        <Link
+          href={`/admin/paciente/historia/evolucion/certificado/${evolucion.evolucion_id}`}>
+          <Boton>Certificado Médico</Boton>
+        </Link>
+        <Link
+          href={`/admin/paciente/historia/evolucion/receta/${evolucion.evolucion_id}`}>
+          <Boton>Receta</Boton>
+        </Link>
         <Boton color='gray' onClick={handleClose}>
           Cerrar
         </Boton>

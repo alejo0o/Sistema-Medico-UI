@@ -108,27 +108,76 @@ const CrearEvolucion = ({
               />
             </Form.Group>
           ) : (
+            <Form.Group as={Col} sm='4'>
+              <Form.Label>Medicación:</Form.Label>
+              <Form.Control
+                onChange={handleaChange}
+                name='medicacion'
+                as='textarea'
+                placeholder='medicación'
+                required
+              />
+            </Form.Group>
+          )}
+          {paciente.genero_id != 1 ? (
+            <Form.Group as={Col} sm='4'>
+              <Form.Label>Medicación:</Form.Label>
+              <Form.Control
+                onChange={handleaChange}
+                name='medicacion'
+                as='textarea'
+                placeholder='medicación'
+                required
+              />
+            </Form.Group>
+          ) : (
+            <Form.Group as={Col} sm='4'>
+              <Form.Label>Indicaciones:</Form.Label>
+              <Form.Control
+                onChange={handleaChange}
+                name='indicaciones'
+                as='textarea'
+                placeholder='indicaciones'
+                required
+              />
+            </Form.Group>
+          )}
+          {paciente.genero_id != 1 ? (
+            <Form.Group as={Col} sm='4'>
+              <Form.Label>Indicaciones:</Form.Label>
+              <Form.Control
+                onChange={handleaChange}
+                name='indicaciones'
+                as='textarea'
+                placeholder='indicaciones'
+                required
+              />
+            </Form.Group>
+          ) : (
+            <Form.Group as={Col} sm='4'>
+              <Form.Label>Proximo Control (opcional):</Form.Label>
+              <Form.Control
+                onChange={handleaChange}
+                name='proximo_control'
+                type='date'
+              />
+            </Form.Group>
+          )}
+        </Form.Row>
+
+        <Form.Row>
+          {paciente.genero_id != 1 ? (
+            <Form.Group as={Col} sm='4'>
+              <Form.Label>Proximo Control (opcional):</Form.Label>
+              <Form.Control
+                onChange={handleaChange}
+                name='proximo_control'
+                type='date'
+              />
+            </Form.Group>
+          ) : (
             <></>
           )}
-          <Form.Group as={Col} sm='4'>
-            <Form.Label>Tratamiento:</Form.Label>
-            <Form.Control
-              onChange={handleaChange}
-              name='tratamiento'
-              as='textarea'
-              placeholder='Tratamiento'
-              required
-            />
-          </Form.Group>
-
-          <Form.Group as={Col} sm='4'>
-            <Form.Label>Proximo Control (opcional):</Form.Label>
-            <Form.Control
-              onChange={handleaChange}
-              name='proximo_control'
-              type='date'
-            />
-          </Form.Group>
         </Form.Row>
         <Boton_A
           className='d-block'

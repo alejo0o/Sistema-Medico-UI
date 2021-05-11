@@ -1,5 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
-
+import { ListItem } from '@material-ui/core';
+import { Dropdown } from 'react-bootstrap';
+import styled from 'styled-components';
 //MATERIAL UI STYLES
 const drawerWidth = 225;
 
@@ -25,6 +27,15 @@ export const useStyles = makeStyles((theme) => ({
     width: '100',
     height: '90',
     padding: '2em',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dropdownItem: {
+    '& i': {
+      color: 'white',
+      transition: '0.5s',
+    },
   },
   styledLink: {
     '& i': {

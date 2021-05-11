@@ -81,7 +81,9 @@ const Calendario = ({
                       }}
                       color='#05445E'>
                       <NotaCircle className='mr-1' />
-                      {`Dr. ${cita.medico_apellidos} - ${cita.hora}`}
+                      {`Dr. ${cita.medico_apellidos} - ${
+                        cita.hora.split(':')[0]
+                      }:${cita.hora.split(':')[1]}`}
                     </StyledCol>
                     <Link href={`/admin/cita/${cita.cita_id}`}>
                       <StyledCol md='auto' color='#003060'>

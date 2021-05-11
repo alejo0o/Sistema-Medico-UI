@@ -44,6 +44,13 @@ const NavBar = ({ color, user }) => {
               Servicios <i className='fas fa-notes-medical' />
             </NavBarItem>
           </Link>
+          <Link href='/acerca'>
+            <NavBarItem
+              className={`${matches ? 'mb-0' : 'mr-5'} btn`}
+              variant='light'>
+              Acerca De <i className='fas fa-address-book' />
+            </NavBarItem>
+          </Link>
           {user.isLoggedIn ? (
             <Dropdown>
               <StyledDropToggle
@@ -64,7 +71,7 @@ const NavBar = ({ color, user }) => {
                     <i className='fas fa-calendar-check' /> Citas
                   </a>
                 </Link>
-                <Link href='/'>
+                <Link href='/perfil'>
                   <a className='dropdown-item'>
                     <i className='fas fa-user-circle' /> Perfil
                   </a>

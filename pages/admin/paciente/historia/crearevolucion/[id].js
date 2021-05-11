@@ -68,7 +68,8 @@ const index = ({ paciente, historiaClinica, user }) => {
     fecha_ultima_menstruacion: '',
     procedimiento: '',
     diagnostico: '[]',
-    tratamiento: '',
+    medicacion: '',
+    indicaciones: '',
     proximo_control: '',
   });
   const [modalSuccess, setmodalSuccess] = useState(false); //modal de éxito

@@ -117,17 +117,31 @@ const EditarEvolucion = ({
             <></>
           )}
           <Form.Group as={Col} sm='4'>
-            <Form.Label>Tratamiento:</Form.Label>
+            <Form.Label>Medicación:</Form.Label>
             <Form.Control
               onChange={handleaChange}
-              value={evolucion.tratamiento}
-              name='tratamiento'
+              value={evolucion.medicacion}
+              name='medicacion'
               as='textarea'
-              placeholder='Tratamiento'
+              placeholder='medicación'
               required
             />
           </Form.Group>
 
+          <Form.Group as={Col} sm='4'>
+            <Form.Label>Indicaciones:</Form.Label>
+            <Form.Control
+              onChange={handleaChange}
+              value={evolucion.indicaciones}
+              name='indicaciones'
+              as='textarea'
+              placeholder='indicaciones'
+              required
+            />
+          </Form.Group>
+        </Form.Row>
+
+        <Form.Row>
           <Form.Group as={Col} sm='4'>
             <Form.Label>Proximo Control:</Form.Label>
             <Form.Control
