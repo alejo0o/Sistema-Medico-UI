@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import Head from 'next/head';
 import Login from '@/components/Log In/LogIn';
 import { MainContainer } from '@/components/Log In/LoginStyles';
 import ModalError from '@/components/Admin/Modales/ModalError';
@@ -65,6 +66,14 @@ const index = ({ consultorio }) => {
 
   return (
     <MainContainer>
+      <Head>
+        <title>MediClinic | Login</title>
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
+        />
+        <link rel='icon' href='/company.png' />
+      </Head>
       <Login
         handleSubmit={handleSubmit}
         loading={loading}

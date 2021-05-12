@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Head from 'next/head';
 import useSWR from 'swr';
 import Drawer from '@/components/Admin/Drawer/SideDrawer';
 import NavBar from '@/components/Admin/NavBar/NavBar';
@@ -26,6 +27,14 @@ const AdminLayout = ({ children, miniDrawer }) => {
 
   return (
     <div className='d-flex' style={{ maxHeight: 'auto', minHeight: '100vh' }}>
+      <Head>
+        <title>MediClinic</title>
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
+        />
+        <link rel='icon' href='/company.png' />
+      </Head>
       <Drawer
         logo={consultorio.logo}
         mobileOpen={mobileOpen}

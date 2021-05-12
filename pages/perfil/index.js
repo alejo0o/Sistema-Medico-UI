@@ -8,6 +8,7 @@ import {
   LinearProgress,
 } from '@material-ui/core';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 //
 import Layout from '@/components/Layouts/Layout';
 import useUser from '@/components/utils/useUser';
@@ -81,6 +82,14 @@ const index = () => {
 
   return (
     <Layout user={user}>
+      <Head>
+        <title>MediClinic | Perfil</title>
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
+        />
+        <link rel='icon' href='/company.png' />
+      </Head>
       <div className={`${matches ? 'd-block' : 'd-flex'} p-2`}>
         <div
           className={`${matches ? 'w-100' : 'w-25'} h-100 text-white`}

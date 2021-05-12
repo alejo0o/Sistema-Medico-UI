@@ -1,4 +1,5 @@
 import { useMediaQuery } from '@material-ui/core';
+import Head from 'next/head';
 //
 import Layout from '@/components/Layouts/Layout';
 import useUser from '@/components/utils/useUser';
@@ -11,11 +12,19 @@ const index = () => {
 
   return (
     <Layout user={user}>
-      <link rel='preconnect' href='https://fonts.gstatic.com' />
-      <link
-        href='https://fonts.googleapis.com/css2?family=Itim&display=swap'
-        rel='stylesheet'
-      />
+      <Head>
+        <title>MediClinic | Acerca de</title>
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no'
+        />
+        <link rel='icon' href='/company.png' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Itim&display=swap'
+          rel='stylesheet'
+        />
+      </Head>
 
       <div className='p-2'>
         <div className='w-100 text-center'>
