@@ -56,7 +56,8 @@ const index = ({ consultorio }) => {
         }
       })
       .catch((error_peticion) => {
-        seterror(error_peticion);
+        seterror(error_peticion.response.status);
+
         setloading(false);
         seterrorModal(true);
       });
@@ -75,8 +76,14 @@ const index = ({ consultorio }) => {
         handleClose={() => {
           seterrorModal(false);
         }}
-        tituloMensaje='Credenciales Inválidas!'
-        mensaje='El usuario ingresado es incorrecto, revisar las credenciales ingresadas'
+        tituloMensaje={
+          error === 401 ? 'Credenciales Inválidas!' : 'Error del servidor!'
+        }
+        mensaje={
+          error === 401
+            ? 'El usuario ingresado es incorrecto, revisar las credenciales ingresadas'
+            : 'Hay un fallo en el sistema de usuarios. Intentelo más tarde o contacte al administrador.'
+        }
       />
     </MainContainer>
   );

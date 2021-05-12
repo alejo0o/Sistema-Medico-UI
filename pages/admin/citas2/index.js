@@ -18,6 +18,7 @@ import {
   parseFechaPgsql,
 } from '@/components/utils/utils';
 import ModalCreacion from '@/components/Admin/Modales/CrearCita';
+import ErrorPage from '@/components/Error/ErrorPage';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   //Revisa si el usuario esta seteado antes de hacer la petición
@@ -79,7 +80,11 @@ const index = ({ user, medicos }) => {
   //-------------Props de la pagina--------------------//
   /*---------------Funciones del componente------- */
   //Revalida cada segundo el data fetching
-  const { data: citas, isLoading, isError } = swrRevalidateHook(
+  const {
+    data: citas,
+    isLoading,
+    isError,
+  } = swrRevalidateHook(
     `/v1/citasxmes/${format(currentMonth, 'M')}/${
       user.tipo === 'user' ? medicoSelect : user.cedula
     }`,
@@ -241,6 +246,8 @@ const index = ({ user, medicos }) => {
     }
   };
 
+  if (isError) return <ErrorPage code={isError.response.status} />;
+
   return (
     <AdminLayout>
       {user.tipo === 'user' && (
@@ -256,9 +263,7 @@ const index = ({ user, medicos }) => {
               {medicos.map((medico) => (
                 <option
                   key={medico.cedula}
-                  value={
-                    medico.cedula
-                  }>{`Dr./Dra. ${medico.nombres
+                  value={medico.cedula}>{`Dr./Dra. ${medico.nombres
                   .toString()
                   .trim()} ${medico.apellidos.toString().trim()}`}</option>
               ))}

@@ -14,6 +14,7 @@ import NotificacionEnviada from '@/components/Admin/Modales/NotificacionEnviada'
 import ModalError from '@/components/Admin/Modales/ModalError';
 import { guardar_numero, get_fecha } from '@/components/utils/utils';
 import { LinearProgress } from '@material-ui/core';
+import ErrorPage from '@/components/Error/ErrorPage';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   //Revisa si el usuario esta seteado antes de hacer la petición
@@ -237,6 +238,8 @@ const index = ({ user, medicos }) => {
       setloading(false);
     }
   };
+
+  if (isError) return <ErrorPage code={isError.response.status} />;
 
   return (
     <AdminLayout>

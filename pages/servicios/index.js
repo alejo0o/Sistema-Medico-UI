@@ -11,6 +11,7 @@ import ImagenTexto from '@/components/Servicios/ImagenTexto';
 import TextoImagen from '@/components/Servicios/TextoImagen';
 import { CustomHR } from '@/components/CommonStyles/CommonStyles';
 import useUser from '@/components/utils/useUser';
+import ErrorPage from '@/components/Error/ErrorPage';
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -34,6 +35,8 @@ const index = () => {
   );
 
   if (!user) return <></>;
+
+  if (error) return <ErrorPage code={error.response.status} />;
 
   return (
     <Layout user={user}>

@@ -12,6 +12,7 @@ import LayoutSkeleton from '@/components/Admin/Skeletons/LayoutSkeleton';
 import axios from '@/components/utils/axios-helper';
 import useUser from '@/components/utils/useUser';
 import { swrHook } from '@/components/utils/utils';
+import ErrorPage from '@/components/Error/ErrorPage';
 
 const index = () => {
   //-----Variables de estado de la página-----//
@@ -22,10 +23,11 @@ const index = () => {
   const [modalError, setmodalError] = useState(false); //modal de error
   const router = useRouter();
 
-  const { data: tratamiento, isLoading, isError } = swrHook(
-    `/v1/tratamientos/${router.query.id}`,
-    user
-  );
+  const {
+    data: tratamiento,
+    isLoading,
+    isError,
+  } = swrHook(`/v1/tratamientos/${router.query.id}`, user);
   const handleSubmit = async (values) => {
     setloading(true);
     try {
@@ -50,6 +52,8 @@ const index = () => {
         <FormSkeleton number={1} />
       </LayoutSkeleton>
     );
+
+  if (isError) return <ErrorPage code={isError.response.status} />;
 
   return (
     <AdminLayout>

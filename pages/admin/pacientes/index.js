@@ -13,7 +13,6 @@ import PacientesTable from '@/components/Admin/Tables/PacientesTable';
 //Helper para la verificación del usuario
 import withSession from '@/components/utils/session';
 import axios from '@/components/utils/axios-helper';
-import ErrorPage from '@/components/Error/ErrorPage';
 
 export const getServerSideProps = withSession(
   async ({ query: { page = 1 }, req, res }) => {
@@ -29,28 +28,19 @@ export const getServerSideProps = withSession(
       };
     }
 
-    try {
-      const { data } = await axios(user.token).get(
-        `/v1/pacientes?page=${page}`
-      );
-      return {
-        props: {
-          data,
-          page,
-          user,
-        },
-      };
-    } catch ({ response: { status } }) {
-      return {
-        props: {
-          server_error: status.toString(),
-        },
-      };
-    }
+    const { data } = await axios(user.token).get(`/v1/pacientes?page=${page}`);
+
+    return {
+      props: {
+        data,
+        page,
+        user,
+      },
+    };
   }
 );
 
-const index = ({ data, user, server_error }) => {
+const index = ({ data, user }) => {
   /*-------------Variables de estado de la pagina-------------*/
   const [error, seterror] = useState(null); //si existe un error se setea la var
   const [loading, setloading] = useState(false);
@@ -80,8 +70,9 @@ const index = ({ data, user, server_error }) => {
   const [pacientesQuery, setpacientesQuery] = useState('');
   const [pacientesQueryResultados, setpacientesQueryResultados] = useState();
   //-------------Props de la pagina--------------------//
-
   const router = useRouter();
+  const { data: pacientes } = data;
+  const { last_page } = data;
 
   //-------------Funciones de la página------------//
   useMemo(() => {
@@ -101,7 +92,6 @@ const index = ({ data, user, server_error }) => {
       setshowInfo(true);
     } catch (error_peticion) {
       seterror(error_peticion);
-
       setloading(false);
     }
   };
@@ -175,13 +165,11 @@ const index = ({ data, user, server_error }) => {
     }
   };
 
-  if (server_error || error) return <ErrorPage code={server_error ?? error} />;
-
   return (
     <AdminLayout>
       {loading && <LinearProgress />}
       <PacientesTable
-        pacientes={pacientesQueryResultados ?? data.data}
+        pacientes={pacientesQueryResultados ?? pacientes}
         handleShowInfo={handleShowInfo}
         handleModalDelete={handleModalDelete}
         handleChangeQuery={handleChangeQuery}
@@ -189,7 +177,7 @@ const index = ({ data, user, server_error }) => {
         handleSearchPacientes={handleSearchPacientes}
         handleSearchPacientesKey={handleSearchPacientesKey}
       />
-      <Pagination totalPages={data.last_page} path='/admin/pacientes' />
+      <Pagination totalPages={last_page} path='/admin/pacientes' />
       {/*----------Modal para ver la información del paciente------- */}
       <ModalInfoPaciente
         show={showInfo}

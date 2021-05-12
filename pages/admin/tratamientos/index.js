@@ -46,10 +46,8 @@ const index = ({ data, user }) => {
   });
   const [deleteModal, setdeleteModal] = useState(false); //variable para el modal de eliminación
   const [tratamientosQuery, settratamientosQuery] = useState('');
-  const [
-    tratamientosQueryResultados,
-    settratamientosQueryResultados,
-  ] = useState();
+  const [tratamientosQueryResultados, settratamientosQueryResultados] =
+    useState();
   //-------------Props de la pagina--------------------//
   const router = useRouter();
   const { data: tratamientos } = data;

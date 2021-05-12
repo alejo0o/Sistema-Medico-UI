@@ -73,7 +73,6 @@ const index = () => {
     } catch (error_peticion) {
       seterror(error_peticion);
       setmodalError(true);
-      console.log(error_peticion);
       setloading(false);
     }
   };
