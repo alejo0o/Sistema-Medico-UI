@@ -54,9 +54,7 @@ const index = ({ user, data }) => {
   //-------------Props de la pagina--------------------//
   const router = useRouter();
   const { data: medicos } = data;
-  const {
-    meta: { last_page },
-  } = data;
+  const { last_page } = data;
   //-------------Funciones de la página------------//
   useMemo(() => {
     if (medicosQuery.trim().length == 0) setmedicosResults();

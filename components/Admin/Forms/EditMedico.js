@@ -22,35 +22,18 @@ const StyledIcon = styled.i`
 `;
 
 const schema = yup.object().shape({
-  apellidos: yup.string().required(),
-  cedula: yup.number().required(),
-  nombres: yup.string().required(),
-  telefono: yup.number().required().positive().integer(),
-  email: yup.string().email().required(),
+  apellidos: yup.string().required('Campo requerido'),
+  cedula: yup
+    .string()
+    .matches(/^[0-9]{10}$/i, 'Es un campo numerico de 10 digitos')
+    .required('Campo requerido'),
+  nombres: yup.string().required('Campo requerido'),
+  telefono: yup
+    .string()
+    .matches(/^09[8|9]{1}[0-9]{7}$/i, 'Formato incorrecto (ej: 0991234567)')
+    .required('Teléfono requerido'),
+  email: yup.string().email('Correo inválido').required('Campo requerido'),
 });
-
-const validatecedula = (value) => {
-  let error;
-  if (!value) error = 'La cédula es requerida';
-  else if (!/^[0-9]{10}$/i.test(value))
-    error = 'Es un campo numerico de 10 digitos';
-  return error;
-};
-const validateTelefonoEC = (value) => {
-  let error;
-  if (!value) error = 'Telefono requerido';
-  else if (!/^09[8|9]{1}[0-9]{7}$/i.test(value))
-    error = 'Formato incorrecto (ej: 0991234567)';
-  return error;
-};
-const validateTelefonoOpcional = (value) => {
-  let error;
-  if (value) {
-    if (!/^09[8|9]{1}[0-9]{7}$/i.test(value))
-      error = 'Formato incorrecto (ej: 0991234567)';
-  }
-  return error;
-};
 
 const CrearMedico = ({
   handleSubmit,
@@ -147,10 +130,10 @@ const CrearMedico = ({
                   value={values.cedula}
                   onChange={handleChange}
                   placeholder='Cedula'
-                  isInvalid={validatecedula(values.cedula)}
+                  isInvalid={errors.cedula}
                 />
                 <Form.Control.Feedback type='invalid'>
-                  {validatecedula(values.cedula)}
+                  {errors.cedula}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -165,7 +148,7 @@ const CrearMedico = ({
                   isInvalid={errors.nombres}
                 />
                 <Form.Control.Feedback type='invalid'>
-                  Campo requerido
+                  {errors.nombres}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -180,7 +163,7 @@ const CrearMedico = ({
                   isInvalid={errors.apellidos}
                 />
                 <Form.Control.Feedback type='invalid'>
-                  Campo requerido
+                  {errors.apellidos}
                 </Form.Control.Feedback>
               </Form.Group>
             </Form.Row>
@@ -193,13 +176,11 @@ const CrearMedico = ({
                   type='text'
                   value={values.telefono}
                   onChange={handleChange}
-                  isInvalid={
-                    validateTelefonoEC(values.telefono) || errors.telefono
-                  }
+                  isInvalid={errors.telefono}
                   placeholder='0991234567'
                 />
                 <Form.Control.Feedback type='invalid'>
-                  {validateTelefonoEC(values.telefono)}
+                  {errors.telefono}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -214,7 +195,7 @@ const CrearMedico = ({
                   isInvalid={errors.email}
                 />
                 <Form.Control.Feedback type='invalid'>
-                  Correo Invalido
+                  {errors.email}
                 </Form.Control.Feedback>
               </Form.Group>
             </Form.Row>

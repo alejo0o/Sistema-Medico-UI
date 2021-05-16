@@ -26,7 +26,7 @@ export const getServerSideProps = withSession(
     const { data } = await axios(user.token).get(
       `/v1/tratamientos?page=${page}`
     );
-
+    console.log(data);
     return {
       props: {
         data,
@@ -51,9 +51,8 @@ const index = ({ data, user }) => {
   //-------------Props de la pagina--------------------//
   const router = useRouter();
   const { data: tratamientos } = data;
-  const {
-    meta: { last_page },
-  } = data;
+
+  const { last_page } = data;
   //-------------Funciones de la página------------//
   useMemo(() => {
     if (tratamientosQuery.trim().length == 0) settratamientosQueryResultados();

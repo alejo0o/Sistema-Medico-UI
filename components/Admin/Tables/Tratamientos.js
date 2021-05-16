@@ -104,7 +104,7 @@ export default function CustomizedTables({
                   {tratamiento.nombre}
                 </StyledTableCell>
                 <StyledTableCell component='td' align='center' scope='row'>
-                  {tratamiento.precio}
+                  {tratamiento.precio}$
                 </StyledTableCell>
 
                 <StyledTableCell component='td' align='center'>

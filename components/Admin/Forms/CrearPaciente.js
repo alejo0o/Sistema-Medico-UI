@@ -5,39 +5,26 @@ import { Formik } from 'formik';
 
 const schema = yup.object().shape({
   apellidos: yup.string().required(),
-  cedula: yup.number().required(),
-  contacto_emergencia_nombre: yup.string(),
-  contacto_emergencia_telefono: yup.number().positive().integer(),
+  cedula: yup
+    .string()
+    .matches(/^[0-9]{10}$/i, 'Es un campo numerico de 10 digitos')
+    .required('Campo requerido'),
+  contacto_emergencia_nombre: yup.string().optional(),
+  contacto_emergencia_telefono: yup
+    .string()
+    .matches(/^09[8|9]{1}[0-9]{7}$/i, 'Formato incorrecto (ej: 0991234567)')
+    .optional(),
   direccion: yup.string().required(),
   lugarnacimiento: yup.string().required(),
   nombres: yup.string().required(),
   numero_hijos: yup.number().required().integer(),
   ocupacion: yup.string().required(),
-  telefono: yup.number().required().positive().integer(),
-  email: yup.string().email(),
+  telefono: yup
+    .string()
+    .matches(/^09[8|9]{1}[0-9]{7}$/i, 'Formato incorrecto (ej: 0991234567)')
+    .required('Teléfono requerido'),
+  email: yup.string().email('Correo inválido').optional(),
 });
-const validatecedula = (value) => {
-  let error;
-  if (!value) error = 'La cédula es requerida';
-  else if (!/^[0-9]{10}$/i.test(value))
-    error = 'Es un campo numerico de 10 digitos';
-  return error;
-};
-const validateTelefonoEC = (value) => {
-  let error;
-  if (!value) error = 'Telefono requerido';
-  else if (!/^09[8|9]{1}[0-9]{7}$/i.test(value))
-    error = 'Formato incorrecto (ej: 0991234567)';
-  return error;
-};
-const validateTelefonoOpcional = (value) => {
-  let error;
-  if (value) {
-    if (!/^09[8|9]{1}[0-9]{7}$/i.test(value))
-      error = 'Formato incorrecto (ej: 0991234567)';
-  }
-  return error;
-};
 
 const CrearPaciente = ({
   etnias,
@@ -66,10 +53,10 @@ const CrearPaciente = ({
                   name='cedula'
                   type='text'
                   placeholder='Cedula'
-                  isInvalid={validatecedula(values.cedula)}
+                  isInvalid={errors.cedula}
                 />
                 <Form.Control.Feedback type='invalid'>
-                  {validatecedula(values.cedula)}
+                  {errors.cedula}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -139,13 +126,11 @@ const CrearPaciente = ({
                 <Form.Control
                   name='telefono'
                   type='text'
-                  isInvalid={
-                    validateTelefonoEC(values.telefono) || errors.telefono
-                  }
+                  isInvalid={errors.telefono}
                   placeholder='0991234567'
                 />
                 <Form.Control.Feedback type='invalid'>
-                  {validateTelefonoEC(values.telefono)}
+                  {errors.telefono}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -260,7 +245,7 @@ const CrearPaciente = ({
                   isInvalid={errors.email}
                 />
                 <Form.Control.Feedback type='invalid'>
-                  Correo Invalido
+                  {errors.email}
                 </Form.Control.Feedback>
               </Form.Group>
             </Form.Row>
@@ -271,10 +256,10 @@ const CrearPaciente = ({
                   name='contacto_emergencia_nombre'
                   type='text'
                   placeholder='Nombre'
-                  isValid={!errors.contacto_emergencia_nombre}
+                  isInvalid={errors.contacto_emergencia_nombre}
                 />
-                <Form.Control.Feedback type='valid'>
-                  Campo opcional
+                <Form.Control.Feedback type='invalid'>
+                  {errors.contacto_emergencia_nombre}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} sm='4' sm='4'>
@@ -282,25 +267,12 @@ const CrearPaciente = ({
                 <Form.Control
                   name='contacto_emergencia_telefono'
                   type='text'
-                  isInvalid={
-                    validateTelefonoOpcional(
-                      values.contacto_emergencia_telefono
-                    ) || errors.contacto_emergencia_telefono
-                  }
-                  isValid={
-                    !validateTelefonoOpcional(
-                      values.contacto_emergencia_telefono
-                    )
-                  }
+                  isInvalid={errors.contacto_emergencia_telefono}
                   placeholder='Teléfono'
                 />
-                <Form.Control.Feedback type='valid'>
-                  Campo opcional
-                </Form.Control.Feedback>
+
                 <Form.Control.Feedback type='invalid'>
-                  {validateTelefonoOpcional(
-                    values.contacto_emergencia_telefono
-                  )}
+                  {errors.contacto_emergencia_telefono}
                 </Form.Control.Feedback>
               </Form.Group>
             </Form.Row>

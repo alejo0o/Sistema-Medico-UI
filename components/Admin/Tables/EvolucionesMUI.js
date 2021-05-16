@@ -1,4 +1,5 @@
 import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { Form, Col } from 'react-bootstrap';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -44,6 +45,10 @@ export default function CustomizedTables({
   handleShowInfo,
   paciente,
   handleModalDelete,
+  evolucionesQuery,
+  handleChangeQuery,
+  handleSearchEvolucionesKey,
+  handleSearchEvoluciones,
 }) {
   const classes = useStyles();
 
@@ -70,6 +75,23 @@ export default function CustomizedTables({
           </Link>
         </ButtonContainer>
       </ButtonsContainer>
+
+      <Form.Group as={Col} sm='4' className='pl-0'>
+        <Form.Label>Fecha:</Form.Label>
+        <div className='d-flex'>
+          <Form.Control
+            placeholder='ej: 2000-02-30'
+            name='categoria'
+            type='text'
+            value={evolucionesQuery}
+            onChange={handleChangeQuery}
+            onKeyDown={handleSearchEvolucionesKey}
+          />
+          <Boton className='' onClick={handleSearchEvoluciones}>
+            <i className='fas fa-search' style={{ fontSize: '1.5em' }} />
+          </Boton>
+        </div>
+      </Form.Group>
 
       {/*-----------------Tabla-------------*/}
       <TableContainer component={Paper}>

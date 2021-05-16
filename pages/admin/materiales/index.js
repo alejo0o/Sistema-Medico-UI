@@ -50,9 +50,7 @@ const index = ({ data, user, page }) => {
   //-------------Props de la pagina--------------------//
   const router = useRouter();
   const { data: materiales } = data;
-  const {
-    meta: { last_page },
-  } = data;
+  const { last_page } = data;
   //-------------Funciones de la página------------//
 
   useMemo(() => {

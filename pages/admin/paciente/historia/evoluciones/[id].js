@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import LinearProgress from '@material-ui/core/LinearProgress';
 //Componentes
 import AdminLayout from '@/components/Layouts/AdminLayout';
@@ -10,6 +10,8 @@ import EvolucionesTableMUI from '@/components/Admin/Tables/EvolucionesMUI';
 //Auth
 import withSession from '@/components/utils/session';
 import axios from '@/components/utils/axios-helper';
+import ModalError from '@/components/Admin/Modales/ModalError';
+import { format, parseISO } from 'date-fns';
 
 export const getServerSideProps = withSession(
   async ({ query: { page = 1, id }, req }) => {
@@ -43,6 +45,12 @@ export const getServerSideProps = withSession(
       `/v1/pacientes/${id}`
     );
 
+    if (!data || !paciente) {
+      return {
+        notFound: true,
+      };
+    }
+
     return {
       props: {
         data,
@@ -70,14 +78,20 @@ const index = ({ data, paciente, user }) => {
     indicaciones: '',
     proximo_control: '',
   });
+  const [evolucionesQuery, setevolucionesQuery] = useState('');
+  const [evolucionesResultados, setevolucionesResultados] = useState();
   const [showInfo, setshowInfo] = useState(false); //variable para el modal de info evolucion
   const [deleteModal, setdeleteModal] = useState(false); //variable para el modal de eliminación
+  const [modalError, setmodalError] = useState();
   //----------------Props de la pagina---------------//
   const { data: evoluciones } = data;
   const { last_page } = data;
   const router = useRouter();
 
   //--------------Funciones de la página-----------//
+  useMemo(() => {
+    if (evolucionesQuery.trim().length == 0) setevolucionesResultados();
+  }, [evolucionesQuery]);
   //Obtiene las enfermedades del paciente del CIE10
   const handleShowInfo = async (evolucion_m) => {
     setevolucion(evolucion_m);
@@ -106,20 +120,87 @@ const index = ({ data, paciente, user }) => {
     }
   };
 
+  const parseFechaBusqueda = (fecha_busqueda) => {
+    try {
+      return format(parseISO(fecha_busqueda), 'PP');
+    } catch (error) {
+      setmodalError(true);
+      return;
+    }
+  };
+  //Realiza la petición de buscar las evoluciones por boton
+  const handleSearchEvoluciones = async () => {
+    if (
+      evolucionesQuery.trim() &&
+      parseFechaBusqueda(evolucionesQuery.trim())
+    ) {
+      setloading(true);
+      try {
+        const {
+          data: { data: evolucionesResultados },
+        } = await axios(user.token).get(
+          `/v1/evolucionesxfecha/${router.query.id}/${parseFechaBusqueda(
+            evolucionesQuery.trim()
+          )}`
+        );
+        setevolucionesResultados(evolucionesResultados);
+        setloading(false);
+      } catch (error_peticion) {
+        seterror(error_peticion);
+        setloading(false);
+      }
+    } else {
+      setevolucionesResultados();
+    }
+  };
+  //Realiza la petición de buscar las por enter
+  const handleSearchEvolucionesKey = async (event) => {
+    if (event.key === 'Enter') {
+      if (
+        evolucionesQuery.trim() &&
+        parseFechaBusqueda(evolucionesQuery.trim())
+      ) {
+        setloading(true);
+        try {
+          const {
+            data: { data: evolucionesResultados },
+          } = await axios(user.token).get(
+            `/v1/evolucionesxfecha/${router.query.id}/${parseFechaBusqueda(
+              evolucionesQuery.trim()
+            )}`
+          );
+          setevolucionesResultados(evolucionesResultados);
+          setloading(false);
+        } catch (error_peticion) {
+          seterror(error_peticion);
+          setloading(false);
+        }
+      } else {
+        setevolucionesResultados();
+      }
+    }
+  };
+
   return (
     <AdminLayout>
       {loading && <LinearProgress />}
       <EvolucionesTableMUI
-        evoluciones={evoluciones}
+        evoluciones={evolucionesResultados ?? evoluciones}
         handleShowInfo={handleShowInfo}
         paciente={paciente}
         handleModalDelete={handleModalDelete}
+        handleChangeQuery={(event) => {
+          setevolucionesQuery(String(event.target.value));
+        }}
+        evolucionesQuery={evolucionesQuery}
+        handleSearchEvoluciones={handleSearchEvoluciones}
+        handleSearchEvolucionesKey={handleSearchEvolucionesKey}
       />
       <Pagination
         totalPages={last_page}
         path={`/admin/paciente/historia/evoluciones/${router.query.id}`}
       />
-      {/*----------Modal para ver la información del paciente------- */}
+      {/*----------Modal para ver la información de la evolución------- */}
       {!loading && (
         <ModalInfoEvolucion
           show={showInfo}
@@ -128,6 +209,15 @@ const index = ({ data, paciente, user }) => {
           evolucion={evolucion}
         />
       )}
+      {/*----------Modal de error------- */}
+      <ModalError
+        show={modalError}
+        handleClose={() => {
+          setmodalError(false);
+        }}
+        tituloMensaje='Error!'
+        mensaje='Error al buscar con la fecha especificada. Ejemplo para el formato de fecha: 2000-01-31'
+      />
       {/*----------Modal para eliminar------- */}
       <ModalEliminar
         show={deleteModal}
