@@ -26,7 +26,7 @@ export const getServerSideProps = withSession(
     const { data } = await axios(user.token).get(
       `/v1/tratamientos?page=${page}`
     );
-    console.log(data);
+
     return {
       props: {
         data,

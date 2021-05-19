@@ -28,6 +28,7 @@ const index = () => {
     isLoading,
     isError,
   } = swrHook(`/v1/inventario/${router.query.id}`, user);
+
   const handleSubmit = async (values) => {
     setloading(true);
     try {

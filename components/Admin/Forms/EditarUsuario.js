@@ -66,7 +66,6 @@ const EditarUsuario = ({
           } catch (error_peticion) {
             seterror(error_peticion);
             setloading(false);
-            console.log(error_peticion);
           }
         }}
         initialValues={usuario}>

@@ -96,6 +96,7 @@ const EditarCita = ({
             <Form.Control
               name='fecha'
               type='date'
+              min={new Date().toISOString().split('T')[0]}
               onChange={handleChange}
               value={cita.fecha.split(' ')[0]}
               required
@@ -112,9 +113,7 @@ const EditarCita = ({
               {medicos.map((medico) => (
                 <option
                   key={medico.medico_id}
-                  value={
-                    medico.medico_id
-                  }>{`Dr./Dra. ${medico.nombres
+                  value={medico.medico_id}>{`Dr./Dra. ${medico.nombres
                   .toString()
                   .trim()} ${medico.apellidos.toString().trim()}`}</option>
               ))}

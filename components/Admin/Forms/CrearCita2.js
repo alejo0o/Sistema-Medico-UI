@@ -82,6 +82,7 @@ const NuevaCita = ({
             <Form.Control
               name='fecha'
               defaultValue={date}
+              min={new Date().toISOString().split('T')[0]}
               type='date'
               required
             />
@@ -96,9 +97,7 @@ const NuevaCita = ({
               {medicos.map((medico) => (
                 <option
                   key={medico.medico_id}
-                  value={
-                    medico.medico_id
-                  }>{`Dr./Dra. ${medico.nombres
+                  value={medico.medico_id}>{`Dr./Dra. ${medico.nombres
                   .toString()
                   .trim()} ${medico.apellidos.toString().trim()}`}</option>
               ))}

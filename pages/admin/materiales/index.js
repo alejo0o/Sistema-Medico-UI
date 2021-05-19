@@ -98,7 +98,6 @@ const index = ({ data, user, page }) => {
         } catch (error_peticion) {
           seterror(error_peticion);
           setloading(false);
-          console.log(error_peticion);
         }
       } else {
         setmaterialesQueryResultados();

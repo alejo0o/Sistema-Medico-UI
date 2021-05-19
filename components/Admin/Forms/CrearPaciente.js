@@ -90,7 +90,13 @@ const CrearPaciente = ({
             <Form.Row>
               <Form.Group as={Col} sm='4'>
                 <Form.Label>Fecha de Nacimiento:</Form.Label>
-                <Form.Control name='fechanacimiento' type='date' required />
+                <Form.Control
+                  name='fechanacimiento'
+                  type='date'
+                  min='1921-01-01'
+                  max={new Date().toISOString().split('T')[0]}
+                  required
+                />
               </Form.Group>
 
               <Form.Group as={Col} sm='4'>

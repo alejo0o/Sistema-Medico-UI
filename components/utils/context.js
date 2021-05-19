@@ -15,7 +15,6 @@ export function AppWrapper({ children }) {
     fetcher
   );
 
-  console.log('tantas veces');
   if (!user || !consultorio || error) return <></>;
 
   return (

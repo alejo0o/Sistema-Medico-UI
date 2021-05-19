@@ -105,6 +105,8 @@ const EditarPaciente = ({
                 <Form.Control
                   name='fechanacimiento'
                   type='date'
+                  min='1921-01-01'
+                  max={new Date().toISOString().split('T')[0]}
                   onChange={handleChange}
                   value={values.fechanacimiento}
                   required

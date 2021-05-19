@@ -89,7 +89,12 @@ const NuevaCita = ({
         <Row>
           <Form.Group as={Col} sm='6'>
             <Form.Label>Fecha:</Form.Label>
-            <Form.Control name='fecha' type='date' required />
+            <Form.Control
+              name='fecha'
+              type='date'
+              min={new Date().toISOString().split('T')[0]}
+              required
+            />
           </Form.Group>
           <Form.Group as={Col} sm='6' controlId='medico-select'>
             <Form.Label>Médico:</Form.Label>
@@ -97,9 +102,7 @@ const NuevaCita = ({
               {medicos.map((medico) => (
                 <option
                   key={medico.medico_id}
-                  value={
-                    medico.medico_id
-                  }>{`Dr./Dra. ${medico.nombres
+                  value={medico.medico_id}>{`Dr./Dra. ${medico.nombres
                   .toString()
                   .trim()} ${medico.apellidos.toString().trim()}`}</option>
               ))}
