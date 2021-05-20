@@ -47,6 +47,10 @@ class Receta extends PureComponent {
             <div className=' w-100 p-2'>
               <Row className='pl-2 pr-2'>
                 <Col>
+                  <strong>Fecha de emisión: </strong>
+                  {new Date().toISOString().split('T')[0]}
+                </Col>
+                <Col>
                   <strong>Paciente: </strong>
                   {`${data.nombres} ${data.apellidos}`}
                 </Col>
@@ -61,20 +65,18 @@ class Receta extends PureComponent {
               </Row>
             </div>
             <BgImg imagen={consultorio.logo} />
-            <Row>
-              <div className='d-flex'>
-                <div className='w-50 p-5' style={{ textAlign: 'justify' }}>
-                  <h5>
-                    <strong>Medicación</strong>
-                  </h5>
-                  <div>{data.medicacion}</div>
-                </div>
-                <div className='w-50 p-5' style={{ textAlign: 'justify' }}>
-                  <h5>
-                    <strong>Indicaciones:</strong>
-                  </h5>
-                  <div>{data.indicaciones}</div>
-                </div>
+            <Row className='d-flex'>
+              <div className='w-50 p-5' style={{ textAlign: 'justify' }}>
+                <h5>
+                  <strong>Medicación</strong>
+                </h5>
+                <div>{data.medicacion}</div>
+              </div>
+              <div className='w-50 p-5' style={{ textAlign: 'justify' }}>
+                <h5>
+                  <strong>Indicaciones:</strong>
+                </h5>
+                <div>{data.indicaciones}</div>
               </div>
             </Row>
             <Row className='p-2 pt-5 d-flex justify-content-center'>
@@ -90,12 +92,18 @@ class Receta extends PureComponent {
           </BgContainer>
           <div className='d-flex w-100 pl-2 pr-2'>
             <div className='w-50'>
-              <h4>Dirección: {consultorio.nombre}</h4>
+              <h4>{consultorio.nombre}</h4>
             </div>
             <div className='w-50'>
-              <div>Dirección: {consultorio.direccion}</div>
-              <div>Teléfono: {consultorio.telefono}</div>
-              <div>Correo: {consultorio.correo}</div>
+              <div>
+                <strong>Dirección:</strong> {consultorio.direccion}
+              </div>
+              <div>
+                <strong>Teléfono:</strong> {consultorio.telefono}
+              </div>
+              <div>
+                <strong>Correo:</strong> {consultorio.correo}
+              </div>
             </div>
           </div>
         </div>
